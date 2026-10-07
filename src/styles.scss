@@ -1,1 +1,69 @@
 /* You can add global styles to this file, and also import other style files */
+// ============================================
+// NUTRIT - Estilos globales
+// ============================================
+
+// Variables de marca
+$nutrit-green: #4CAF50;
+$nutrit-green-light: #81C784;
+$nutrit-green-dark: #388E3C;
+$nutrit-green-bg: #E8F5E9;
+
+$nutrit-yellow: #FFC107;
+$nutrit-red: #F44336;
+
+$bg-page: #F5F5F5;
+$bg-card: #FFFFFF;
+
+$text-primary: #212121;
+$text-secondary: #757575;
+$text-muted: #9E9E9E;
+
+$border-color: #E0E0E0;
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+$radius-sm: 6px;
+$radius-md: 12px;
+$radius-lg: 20px;
+
+// Reset básico
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+    background-color: $bg-page;
+    color: $text-primary;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    color: $text-primary;
+}
+
+a {
+    color: $nutrit-green;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
