@@ -1,0 +1,188 @@
+@use '../../../../styles' as *;
+
+.login-page {
+    display: flex;
+    min-height: 100vh;
+    background-color: $bg-card;
+}
+
+// Panel izquierdo: imagen
+.login-visual {
+    flex: 1;
+    background-color: $nutrit-green;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+
+    .visual-image {
+        width: 100%;
+        max-width: 500px;
+        aspect-ratio: 1 / 1;
+
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            background-color: #FFFFFF;
+            border: 2px solid #1B4332;
+            position: relative;
+
+            // Simula la X del mockup
+            &::before,
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    to top right,
+                    transparent calc(50% - 1px),
+                    #1B4332 50%,
+                    transparent calc(50% + 1px)
+                );
+            }
+
+            &::after {
+                background: linear-gradient(
+                    to top left,
+                    transparent calc(50% - 1px),
+                    #1B4332 50%,
+                    transparent calc(50% + 1px)
+                );
+            }
+        }
+    }
+}
+
+// Panel derecho: formulario
+.login-panel {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
+}
+
+.login-form-container {
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 32px;
+
+    .brand-icon {
+        font-size: 28px;
+    }
+
+    .brand-name {
+        font-size: 26px;
+        font-weight: 700;
+        color: $nutrit-green;
+        letter-spacing: -0.5px;
+    }
+}
+
+.login-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 32px;
+    color: $text-primary;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    text-align: left;
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        label {
+            font-size: 13px;
+            font-weight: 500;
+            color: $text-secondary;
+        }
+
+        input {
+            padding: 12px 14px;
+            border: 1px solid $border-color;
+            border-radius: $radius-sm;
+            font-size: 14px;
+            background-color: #FAFAFA;
+            transition: border-color 0.2s, background-color 0.2s;
+
+            &::placeholder {
+                color: $text-muted;
+            }
+
+            &:focus {
+                outline: none;
+                border-color: $nutrit-green;
+                background-color: #FFFFFF;
+            }
+        }
+    }
+
+    .btn-login {
+        margin-top: 8px;
+        padding: 14px;
+        background-color: $nutrit-green;
+        color: #FFFFFF;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: $radius-sm;
+        transition: background-color 0.2s;
+
+        &:hover {
+            background-color: $nutrit-green-dark;
+        }
+    }
+}
+
+.signup-text {
+    margin-top: 24px;
+    font-size: 13px;
+    color: $text-secondary;
+
+    a {
+        color: $nutrit-green;
+        font-weight: 600;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+// Responsive
+@media (max-width: 900px) {
+    .login-visual {
+        display: none;
+    }
+
+    .login-page {
+        background-color: $nutrit-green;
+    }
+
+    .login-panel {
+        padding: 40px 20px;
+    }
+
+    .login-form-container {
+        background-color: $bg-card;
+        padding: 40px 30px;
+        border-radius: $radius-md;
+        box-shadow: $shadow-md;
+    }
+}
