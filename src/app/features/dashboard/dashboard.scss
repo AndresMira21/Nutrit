@@ -1,0 +1,83 @@
+@use '../../../styles' as *;
+
+.dashboard-page {
+    min-height: 100vh;
+    background-color: $bg-page;
+}
+
+.dashboard-header {
+    background-color: $bg-card;
+    border-bottom: 1px solid $border-color;
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: $shadow-sm;
+
+    .header-brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .brand-icon {
+            font-size: 22px;
+        }
+
+        .brand-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: $nutrit-green;
+        }
+    }
+
+    .header-user {
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid $nutrit-green-light;
+        }
+    }
+}
+
+.dashboard-main {
+    padding: 32px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.dashboard-greeting {
+    margin-bottom: 24px;
+
+    h1 {
+        font-size: 28px;
+        font-weight: 700;
+        color: $text-primary;
+
+        .user-name {
+            color: $nutrit-green;
+        }
+    }
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        "summary summary"
+        "macros macros"
+        "eat progress"
+        "eat profile";
+    gap: 24px;
+
+    @media (max-width: 1000px) {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "summary"
+            "macros"
+            "eat"
+            "progress"
+            "profile";
+    }
+}
