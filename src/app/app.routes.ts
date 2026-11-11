@@ -4,6 +4,7 @@ import { profileGuard } from './core/guards/profile.guard';
 
 export const routes: Routes = [
   { path: 'login', loadComponent: () => import('./features/auth/login/login').then(m => m.Login) },
+  { path: 'register', loadComponent: () => import('./features/auth/register/register').then(m => m.Register) },
   { path: 'onboarding', loadComponent: () => import('./features/onboarding/onboarding').then(m => m.Onboarding), canActivate: [authGuard] },
   { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard), canActivate: [authGuard, profileGuard] },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },

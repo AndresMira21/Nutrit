@@ -1,4 +1,5 @@
 import { Component, inject, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Router } from '@angular/router';
 import { DashboardTop } from './dashboard-top/dashboard-top';
 import { DashboardBottom } from './dashboard-bottom/dashboard-bottom';
 import { AuthService } from '../../core/services/auth.service';
@@ -14,6 +15,7 @@ import { NutritionService } from '../../core/services/nutrition.service';
 export class Dashboard {
   public auth = inject(AuthService);
   public nutrition = inject(NutritionService);
+  private router = inject(Router);
 
   bmi = computed(() => {
     const user = this.auth.currentUser();
@@ -32,5 +34,12 @@ export class Dashboard {
     this.nutrition.addFood({ id: Date.now(), ...newFoodData });
   }
 
-  handleDeleteFood(id: number) { this.nutrition.deleteFood(id); }
+  handleDeleteFood(id: number) {
+    this.nutrition.deleteFood(id);
+  }
+
+  logout() {
+    this.auth.logout();
+    this.router.navigate(['/login']);
+  }
 }

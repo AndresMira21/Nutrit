@@ -42,12 +42,12 @@ export class Onboarding {
     gender: ['male' as User['gender'], Validators.required]
   });
 
-  // Two-Way Binding
   acceptTerms = signal(false);
 
   private formValue = toSignal(this.profileForm.valueChanges, {
     initialValue: this.profileForm.getRawValue()
   });
+  
   bmiPreview = computed(() => {
     const { weight, height } = this.formValue();
     return weight && height ? weight / Math.pow(height / 100, 2) : 0;
@@ -59,7 +59,6 @@ export class Onboarding {
     return control.invalid && (control.touched || control.dirty);
   }
 
-  // Event Binding (blur): normaliza ortografia
   formatName(): void {
     const c = this.f.name;
     c.setValue(
@@ -69,7 +68,6 @@ export class Onboarding {
     );
   }
 
-  // Event Binding (click)
   selectGender(value: User['gender']): void {
     this.f.gender.setValue(value);
     this.f.gender.markAsDirty();

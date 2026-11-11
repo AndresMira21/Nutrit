@@ -1,23 +1,13 @@
 <div class="login-page">
-  <div class="login-panel onboarding-panel">
+  <div class="login-panel onboarding-panel" style="margin: 0 auto; max-width: 500px;">
     <div class="login-form-container">
       <h1 class="login-title">Completa tu perfil</h1>
 
-      <!-- Event Binding: (ngSubmit) | Property Binding: [formGroup] -->
       <form class="login-form" [formGroup]="profileForm" (ngSubmit)="saveProfile()" novalidate>
-
-        <!-- Nombre -->
         <div class="form-group">
           <label for="name">¿Cómo te llamas?</label>
-          <input
-            id="name"
-            type="text"
-            formControlName="name"
-            placeholder="Ej: Andrés Mira"
-            autocomplete="name"
-            [class.invalid]="showError(f.name)"
-            [attr.aria-invalid]="showError(f.name)"
-            (blur)="formatName()">
+          <input id="name" type="text" formControlName="name" placeholder="Ej: Andrés Mira" autocomplete="name"
+            [class.invalid]="showError(f.name)" [attr.aria-invalid]="showError(f.name)" (blur)="formatName()">
           @if (showError(f.name)) {
             <span class="field-error">
               @if (f.name.hasError('required')) { El nombre es obligatorio }
@@ -30,12 +20,7 @@
         @for (field of numericFields; track field.control) {
           <div class="form-group">
             <label [for]="field.control">{{ field.label }}</label>
-            <input
-              type="number"
-              [id]="field.control"
-              [formControlName]="field.control"
-              [min]="field.min"
-              [max]="field.max"
+            <input type="number" [id]="field.control" [formControlName]="field.control" [min]="field.min" [max]="field.max"
               [class.invalid]="showError(profileForm.controls[field.control])">
             @if (showError(profileForm.controls[field.control])) {
               <span class="field-error">Debe estar entre {{ field.min }} y {{ field.max }}</span>
@@ -43,23 +28,18 @@
           </div>
         }
 
-        <!-- Género -->
         <div class="form-group">
           <label>Género</label>
           <div class="gender-options">
             @for (g of genders; track g.value) {
-              <button
-                type="button"
-                [class.active]="f.gender.value === g.value"
-                [attr.aria-pressed]="f.gender.value === g.value"
-                (click)="selectGender(g.value)">
+              <button type="button" [class.active]="f.gender.value === g.value"
+                [attr.aria-pressed]="f.gender.value === g.value" (click)="selectGender(g.value)">
                 {{ g.label }}
               </button>
             }
           </div>
         </div>
 
-        <!-- Vista previa en vivo -->
         @if (f.name.value) {
           <p class="live-preview">
             Hola, <strong>{{ f.name.value }}</strong>. Tu IMC estimado es
@@ -67,19 +47,12 @@
           </p>
         }
 
-        <!-- Two-Way Binding (standalone porque esta dentro de un [formGroup]) -->
-        <label class="terms">
-          <input
-            type="checkbox"
-            [(ngModel)]="acceptTerms"
-            [ngModelOptions]="{ standalone: true }">
+        <label class="terms" style="display: flex; gap: 10px; margin-bottom: 15px; align-items: center;">
+          <input type="checkbox" [(ngModel)]="acceptTerms" [ngModelOptions]="{ standalone: true }">
           Acepto el tratamiento de mis datos personales
         </label>
 
-        <button
-          type="submit"
-          class="btn-login"
-          [disabled]="profileForm.invalid || !acceptTerms()">
+        <button type="submit" class="btn-login" [disabled]="profileForm.invalid || !acceptTerms()">
           Calcular mi dieta
         </button>
       </form>

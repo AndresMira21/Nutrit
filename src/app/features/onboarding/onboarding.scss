@@ -1,25 +1,35 @@
 @use '../auth/login/login.scss';
 
-.onboarding-panel { margin: 0 auto; max-width: 500px; }
-
-.invalid { border-color: #d32f2f !important; }
-.field-error { color: #d32f2f; font-size: 12px; }
+.field-error { color: red; font-size: 12px; margin-top: 4px; display: block; }
+input.invalid { border-color: red !important; }
 
 .gender-options {
   display: flex;
-  gap: 8px;
-
+  gap: 10px;
+  margin-top: 5px;
+  
   button {
     flex: 1;
-    padding: 12px;
-    border: 1px solid #e0e0e0;
+    padding: 10px;
     border-radius: 6px;
-    background: #fff;
+    border: 1px solid #E0E0E0;
+    background: white;
     cursor: pointer;
-
-    &.active { background: #4caf50; color: #fff; border-color: #4caf50; }
+    transition: all 0.2s;
+    
+    &.active {
+      background: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+    }
   }
 }
 
-.terms { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-.live-preview { font-size: 14px; color: #2e7d32; }
+.live-preview {
+  background: #E8F5E9;
+  padding: 15px;
+  border-radius: 8px;
+  color: #2E7D32;
+  text-align: center;
+  margin-top: 10px;
+}

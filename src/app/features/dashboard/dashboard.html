@@ -1,15 +1,33 @@
 <div class="dashboard-page">
     <header class="dashboard-header">
-        <div class="header-brand"><span class="brand-name">Nutrit</span></div>
-        <div class="header-user">
-            <img [src]="'https://ui-avatars.com/api/?name=' + auth.currentUser()?.name + '&background=4CAF50&color=fff'" class="user-avatar">
+        <div class="header-brand">
+            <span class="brand-name">Nutrit</span>
+        </div>
+        
+        <!-- Contenedor de acciones del usuario -->
+        <div class="header-user-actions">
+            <span class="user-greeting">Hola, <strong>{{ auth.currentUser()?.name }}</strong></span>
+            
+            <button (click)="logout()" class="btn-logout" title="Cerrar Sesión">
+                <!-- Icono de salir (SVG) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                Salir
+            </button>
+
+            <img [src]="'https://ui-avatars.com/api/?name=' + (auth.currentUser()?.name || 'User') + '&background=4CAF50&color=fff'" alt="User Avatar" class="user-avatar">
         </div>
     </header>
+
     <main class="dashboard-main">
         <section class="dashboard-greeting">
             <h1>Buenos días, <span class="user-name">{{ auth.currentUser()?.name }}!</span></h1>
             <p>Tu meta diaria es: <strong>{{ dailyCalories() }} kcal</strong></p>
         </section>
+
         <div class="dashboard-grid">
             <app-dashboard-top [water]="nutrition.water()" [steps]="nutrition.steps()" [kcal]="nutrition.totalKcal()"></app-dashboard-top>
             <app-dashboard-bottom 
