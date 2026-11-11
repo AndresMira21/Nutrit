@@ -2,10 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard-bottom',
-  imports: [],
-  templateUrl: './dashboard-bottom.html',
-  styleUrl: './dashboard-bottom.scss'
+  template: '<p>Dashboard Bottom (pendiente)</p>',
+  styles: []
 })
-export class DashboardBottom {
-
-}
+export class DashboardBottom {}

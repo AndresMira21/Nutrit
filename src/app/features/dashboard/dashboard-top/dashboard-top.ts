@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard-top',
-  imports: [],
+  imports: [DecimalPipe],
   templateUrl: './dashboard-top.html',
-  styleUrl: './dashboard-top.scss'
+  styleUrl: './dashboard-top.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardTop {
-
+  water = input.required<string>();
+  steps = input.required<string>();
+  kcal = input.required<number>();
 }
