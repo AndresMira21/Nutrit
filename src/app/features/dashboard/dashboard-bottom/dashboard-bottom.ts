@@ -1,11 +1,12 @@
 import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 import { Food } from '../../../core/models/food.model';
 import { Achievement } from '../../../core/models/achievement.model';
 import { User } from '../../../core/models/user.model';
 
 @Component({
   selector: 'app-dashboard-bottom',
-  imports: [],
+  imports: [DecimalPipe], // <-- 2. Agrégalo aquí
   templateUrl: './dashboard-bottom.html',
   styleUrl: './dashboard-bottom.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
