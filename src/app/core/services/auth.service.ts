@@ -19,12 +19,21 @@ export class AuthService {
   }
 
   login(email: string, password: string): boolean {
-    if (email === 'admin@nutrit.com' && password === '123456') {
-      this.currentUser.set({ id: 1, name: 'Camilo Dev', email, weight: 0, height: 0, age: 0, gender: 'male', isProfileComplete: false });
-      return true;
-    }
-    return false;
+  if (email === 'admin@nutrit.com' && password === '123456') {
+    this.currentUser.set({
+      id: 1,
+      name: '',            
+      email,
+      weight: 0,
+      height: 0,
+      age: 0,
+      gender: 'male',
+      isProfileComplete: false
+    });
+    return true;
   }
+  return false;
+}
 
   updateProfile(data: Partial<User>): void {
     this.currentUser.update(user => user ? { ...user, ...data, isProfileComplete: true } : null);

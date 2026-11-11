@@ -31,7 +31,7 @@ export class Login {
         if (this.authService.login(email!, password!)) {
           this.router.navigate(['/dashboard']);
         } else {
-          this.errorMessage.set('Credenciales incorrectas. Usa admin@nutrit.com / 123456');
+          this.errorMessage.set('Correo o contraseña incorrectos.');
         }
         this.isLoading.set(false);
       }, 800);

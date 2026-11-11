@@ -6,6 +6,6 @@ export const profileGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
   const user = authService.currentUser();
-  if (user && !user.isProfileComplete) return router.parseUrl('/onboarding');
+  if (user && (!user.isProfileComplete || !user.name)) return router.parseUrl('/onboarding');
   return true;
 };
