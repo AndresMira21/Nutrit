@@ -1,35 +1,45 @@
 @use '../auth/login/login.scss';
 
-.field-error { color: red; font-size: 12px; margin-top: 4px; display: block; }
-input.invalid { border-color: red !important; }
+.onboarding-panel { margin: 0 auto; max-width: 520px; }
 
-.gender-options {
-  display: flex;
-  gap: 10px;
-  margin-top: 5px;
-  
-  button {
-    flex: 1;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #E0E0E0;
-    background: white;
-    cursor: pointer;
-    transition: all 0.2s;
-    
-    &.active {
-      background: #4CAF50;
-      color: white;
-      border-color: #4CAF50;
-    }
-  }
+// Pasos
+.steps {
+  display: flex; gap: 16px; list-style: none; padding: 0; margin: 0 0 8px;
+  font-size: 13px; color: #999;
+  .active { color: #2e7d32; font-weight: 600; }
+  .done { color: #4caf50; }
+}
+.progress {
+  height: 6px; background: #e0e0e0; border-radius: 3px; margin-bottom: 20px; overflow: hidden;
+  .progress-fill { height: 100%; background: #4caf50; transition: width .3s ease; }
 }
 
-.live-preview {
-  background: #E8F5E9;
-  padding: 15px;
-  border-radius: 8px;
-  color: #2E7D32;
-  text-align: center;
-  margin-top: 10px;
+// Campos
+.invalid { border-color: #d32f2f !important; }
+.field-error { color: #d32f2f; font-size: 12px; }
+.counter { font-size: 12px; color: #777; text-align: right; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+fieldset { border: 0; padding: 0; margin: 0 0 16px; }
+legend { font-size: 14px; margin-bottom: 8px; }
+select, textarea {
+  padding: 12px; border-radius: 6px; border: 1px solid #e0e0e0; font: inherit;
+}
+
+// Opciones tipo "chip" (radio, checkbox y botones)
+.options { display: flex; flex-wrap: wrap; gap: 8px; }
+.option {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 6px;
+  background: #fff; cursor: pointer;
+  &.active { background: #4caf50; color: #fff; border-color: #4caf50; }
+  input { accent-color: #fff; }
+}
+
+.terms { display: flex; align-items: center; gap: 8px; font-size: 13px; margin: 12px 0; }
+.live-preview { font-size: 14px; color: #2e7d32; }
+
+.actions { display: flex; gap: 12px; margin-top: 16px; .btn-login { flex: 1; } }
+.btn-secondary {
+  padding: 12px 20px; border-radius: 6px; border: 1px solid #4caf50;
+  background: #fff; color: #4caf50; cursor: pointer;
 }
