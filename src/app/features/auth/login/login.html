@@ -1,54 +1,29 @@
 <div class="login-page">
-
-    <div class="login-visual">
-        <div class="visual-image">
-            <div class="image-placeholder"></div>
-        </div>
-    </div>
-
+    <div class="login-visual"><div class="visual-image"><div class="image-placeholder"></div></div></div>
     <div class="login-panel">
         <div class="login-form-container">
-
-            <!-- Logo -->
-            <div class="brand">
-                <span class="brand-icon">🍏</span>
-                <span class="brand-name">Nutrit</span>
-            </div>
-
-            <!-- Título -->
+            <div class="brand"><span class="brand-name">Nutrit</span></div>
             <h1 class="login-title">Login to Your Account</h1>
-
-            <!-- Formulario -->
-            <form class="login-form">
-
+            <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="Enter your email">
+                    <label>Email</label>
+                    <input type="email" formControlName="email" placeholder="Enter your email">
+                    @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+                        <span style="color: red; font-size: 12px;">Correo inválido</span>
+                    }
                 </div>
-
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Enter your password">
+                    <label>Password</label>
+                    <input type="password" formControlName="password" placeholder="Enter your password">
+                    @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+                        <span style="color: red; font-size: 12px;">Mínimo 6 caracteres</span>
+                    }
                 </div>
-
-                <button type="submit" class="btn-login">Log in</button>
-
+                @if (errorMessage()) { <p style="color: red; font-size: 13px;">{{ errorMessage() }}</p> }
+                <button type="submit" class="btn-login" [disabled]="loginForm.invalid || isLoading()">
+                  {{ isLoading() ? 'Verificando...' : 'Log in' }}
+                </button>
             </form>
-
-            <!-- Link inferior -->
-            <p class="signup-text">
-                Don't have an account? <a href="#">Sign up</a>
-            </p>
-
         </div>
     </div>
-
 </div>
