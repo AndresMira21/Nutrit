@@ -1,1 +1,25 @@
 @use '../auth/login/login.scss';
+
+.onboarding-panel { margin: 0 auto; max-width: 500px; }
+
+.invalid { border-color: #d32f2f !important; }
+.field-error { color: #d32f2f; font-size: 12px; }
+
+.gender-options {
+  display: flex;
+  gap: 8px;
+
+  button {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+
+    &.active { background: #4caf50; color: #fff; border-color: #4caf50; }
+  }
+}
+
+.terms { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.live-preview { font-size: 14px; color: #2e7d32; }
