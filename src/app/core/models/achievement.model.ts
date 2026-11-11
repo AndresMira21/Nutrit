@@ -1,0 +1,1 @@
+export interface Achievement { id: number; icon: string; name: string; }
