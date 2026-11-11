@@ -65,3 +65,66 @@
       "profile";
   }
 }
+
+/* --- Estilos Profesionales para el Header --- */
+
+.header-user-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-greeting {
+    font-size: 14px;
+    color: $text-secondary;
+    
+    strong {
+        color: $text-primary;
+        font-weight: 600;
+    }
+}
+
+.btn-logout {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background-color: transparent;
+    color: $text-secondary;
+    border: 1px solid $border-color;
+    border-radius: 20px; /* Bordes redondeados tipo pastilla */
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    &:hover {
+        background-color: #FFF0F1; /* Fondo rojo muy suave */
+        color: $nutrit-red; /* El texto se vuelve rojo solo al pasar el mouse */
+        border-color: $nutrit-red;
+    }
+}
+
+.user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid $nutrit-green-light;
+    box-shadow: $shadow-sm;
+}
+
+/* Ajuste para móviles */
+@media (max-width: 768px) {
+    .user-greeting {
+        display: none; /* Ocultamos el saludo en móviles para ahorrar espacio */
+    }
+    .btn-logout span {
+        display: none; /* Mostramos solo el icono en móviles */
+    }
+}
