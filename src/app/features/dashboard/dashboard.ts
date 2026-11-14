@@ -39,6 +39,10 @@ export class Dashboard {
     this.nutrition.deleteFood(id);
   }
 
+  handleWeightUpdate(weight: number) {
+    this.auth.updateWeight(weight);
+  }
+
   logout() {
     this.auth.logout();
     this.router.navigate(['/login']);

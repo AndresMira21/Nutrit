@@ -121,22 +121,69 @@
     </section>
 
     <div class="progress-card">
-        <h3 class="card-title">Your Progress</h3>
-        <div class="progress-section">
-            <h4 class="section-subtitle">Goal Tracking</h4>
-            <div class="goal-tracker">
-                <div class="progress-bar"><div class="progress-fill" style="width: 75%;"></div></div>
-                <div class="goal-info">
-                    <span class="progress-text">75%</span>
-                    <div class="goal-values">
-                        <span>Current Weight: {{ user().weight }} kg</span>
-                        <span>Goal: 65 kg</span>
-                    </div>
-                </div>
+        <h3 class="card-title">Tu progreso</h3>
+        <div class="progress-metrics">
+            <div class="progress-metric">
+                <span>Peso actual</span>
+                <strong>{{ user().weight | number:'1.0-1' }} kg</strong>
+            </div>
+            <div class="progress-metric">
+                <span>Estatura</span>
+                <strong>{{ user().height | number:'1.0-0' }} cm</strong>
+            </div>
+            <div class="progress-metric">
+                <span>IMC actual</span>
+                <strong>{{ bmi() | number:'1.1-1' }}</strong>
+            </div>
+            <div class="progress-metric">
+                <span>Variación desde el peso inicial</span>
+                <strong [class.weight-increase]="weightChange() > 0" [class.weight-decrease]="weightChange() < 0">
+                    {{ weightChange() > 0 ? '+' : '' }}
+                    {{ weightChange() | number:'1.0-1' }} kg
+                </strong>
             </div>
         </div>
+
+        <form class="weight-update" (submit)="saveWeight($event)">
+            <label class="food-field" for="current-weight">Registrar peso actual (kg)</label>
+            <div class="weight-update-controls">
+                <input
+                    id="current-weight"
+                    #weightInput
+                    type="number"
+                    min="30"
+                    max="300"
+                    step="0.1"
+                    required
+                    [value]="weightDraft() ?? user().weight"
+                    (input)="weightDraft.set(weightInput.value === '' ? null : weightInput.valueAsNumber)">
+                <button type="submit" class="food-button food-button--primary" [disabled]="weightDraft() === null">
+                    Actualizar
+                </button>
+            </div>
+        </form>
+
+        <div class="progress-section calorie-progress-section">
+            <div class="calorie-progress-heading">
+                <h4 class="section-subtitle">Calorías consumidas hoy</h4>
+                <strong>{{ todayKcal() | number:'1.0-0' }} / {{ dailyCalorieGoal() | number:'1.0-0' }} kcal</strong>
+            </div>
+            <div
+                class="calorie-progress-track"
+                role="progressbar"
+                [attr.aria-valuenow]="calorieProgress() | number:'1.0-0'"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-label="Porcentaje de la meta diaria de calorías">
+                <div class="calorie-progress-fill" [style.width.%]="calorieProgress()"></div>
+            </div>
+            <p class="progress-caption">
+                {{ calorieProgress() | number:'1.0-0' }}% de tu meta diaria estimada
+            </p>
+        </div>
+
         <div class="progress-section">
-            <h4 class="section-subtitle">Achievements</h4>
+            <h4 class="section-subtitle">Logros</h4>
             <div class="achievements">
                 @for (achievement of achievements(); track achievement.id) {
                     <div class="achievement-item">
@@ -144,6 +191,7 @@
                         <p>{{ achievement.name }}</p>
                     </div>
                 }
+                </div>
             </div>
         </div>
     </div>
@@ -160,4 +208,3 @@
             <div class="stat-item"><span class="stat-icon">Peso</span><div class="stat-value">{{ user().weight }} kg</div><div class="stat-label">Weight</div></div>
         </div>
     </div>
-</div>
