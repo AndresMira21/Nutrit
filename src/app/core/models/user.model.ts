@@ -19,6 +19,7 @@ export interface Habits {
 export interface User {
   id: number; name: string; email: string; weight: number;
   height: number; age: number; gender: 'male' | 'female';
+  startingWeight?: number;
   isProfileComplete: boolean;
   habits?: Habits;
 }

@@ -17,9 +17,12 @@ export class DashboardBottom {
   bmi = input.required<number>();
   foods = input.required<Food[]>();
   achievements = input.required<Achievement[]>();
+  todayKcal = input.required<number>();
+  dailyCalorieGoal = input.required<number>();
 
   addFood = output<FoodEntry>();
   deleteFood = output<number>();
+  weightUpdate = output<number>();
 
   protected readonly catalog = FOOD_CATALOG;
   protected readonly entryOpen = signal(false);
@@ -28,6 +31,15 @@ export class DashboardBottom {
   protected readonly manualName = signal('');
   protected readonly grams = signal<number | null>(null);
   protected readonly manualKcal = signal<number | null>(null);
+  protected readonly weightDraft = signal<number | null>(null);
+
+  protected readonly weightChange = computed(() =>
+    this.user().weight - (this.user().startingWeight ?? this.user().weight)
+  );
+  protected readonly calorieProgress = computed(() => {
+    const goal = this.dailyCalorieGoal();
+    return goal > 0 ? Math.min((this.todayKcal() / goal) * 100, 100) : 0;
+  });
 
   protected readonly entry = computed<FoodEntry | null>(() => {
     const grams = this.grams();
@@ -84,6 +96,14 @@ export class DashboardBottom {
 
     this.addFood.emit(entry);
     dialog.close();
+  }
+
+  protected saveWeight(event: Event) {
+    event.preventDefault();
+    const weight = this.weightDraft();
+    if (weight === null || !Number.isFinite(weight) || weight < 30 || weight > 300) return;
+    this.weightUpdate.emit(weight);
+    this.weightDraft.set(null);
   }
 
   onDeleteClick(id: number) { this.deleteFood.emit(id); }

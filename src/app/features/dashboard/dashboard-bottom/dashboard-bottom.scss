@@ -106,7 +106,79 @@
     .food-info { flex: 1; min-width: 0; overflow-wrap: anywhere; h4 { font-size: 14px; margin-bottom: 2px; } p { font-size: 12px; color: $text-secondary; } }
     .btn-delete { background: transparent; color: #a32721; }
 }
-.progress-card { grid-area: progress; background-color: $bg-card; border-radius: $radius-md; padding: 24px; box-shadow: $shadow-sm; }
+.progress-card {
+    grid-area: progress;
+    min-width: 0;
+    background-color: $bg-card;
+    border-radius: $radius-md;
+    padding: 24px;
+    box-shadow: $shadow-sm;
+
+    .card-title { margin-bottom: 18px; }
+}
+.progress-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+.progress-metric {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+    padding: 12px;
+    border-radius: $radius-sm;
+    background: #FAFAFA;
+
+    span { color: $text-secondary; font-size: 12px; }
+    strong { font-size: 18px; overflow-wrap: anywhere; }
+    .weight-increase { color: #a32721; }
+    .weight-decrease { color: #28712d; }
+}
+.weight-update { display: grid; gap: 6px; margin: 16px 0 20px; }
+.weight-update-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+
+    input {
+        width: 100%;
+        min-width: 0;
+        padding: 8px;
+        border: 1px solid $border-color;
+        border-radius: $radius-sm;
+        background: white;
+        color: $text-primary;
+        font: inherit;
+    }
+}
+.progress-section { display: grid; gap: 8px; }
+.section-subtitle { margin: 0; font-size: 14px; font-weight: 600; }
+.calorie-progress-section { margin-bottom: 20px; }
+.calorie-progress-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+
+    strong { font-size: 13px; }
+}
+.calorie-progress-track { height: 10px; overflow: hidden; border-radius: 99px; background: #e7eee8; }
+.calorie-progress-fill { height: 100%; border-radius: inherit; background: #28712d; transition: width 180ms ease; }
+.progress-caption { margin: 0; color: $text-secondary; font-size: 12px; }
+.achievements { display: flex; flex-wrap: wrap; gap: 8px; }
+.achievement-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: $radius-sm;
+    background: #FAFAFA;
+    font-size: 13px;
+
+    p { margin: 0; }
+}
+.achievement-icon { font-size: 18px; }
 .profile-card { grid-area: profile; background-color: $bg-card; border-radius: $radius-md; padding: 24px; box-shadow: $shadow-sm; }
 .user-profile { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; .user-avatar { width: 56px; height: 56px; border-radius: $radius-sm; } }
 .user-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; .stat-item { background: #FAFAFA; padding: 12px; text-align: center; border-radius: $radius-sm; } }

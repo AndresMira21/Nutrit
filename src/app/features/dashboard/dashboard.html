@@ -29,10 +29,12 @@
         </section>
 
         <div class="dashboard-grid">
-            <app-dashboard-top [water]="nutrition.water()" [steps]="nutrition.steps()" [kcal]="nutrition.totalKcal()"></app-dashboard-top>
+            <app-dashboard-top [water]="nutrition.water()" [steps]="nutrition.steps()" [kcal]="nutrition.todayKcal()"></app-dashboard-top>
             <app-dashboard-bottom 
                 [user]="auth.currentUser()!" [bmi]="bmi()" [foods]="nutrition.foods()" [achievements]="nutrition.achievements()"
-                (addFood)="handleAddFood($event)" (deleteFood)="handleDeleteFood($event)">
+                [todayKcal]="nutrition.todayKcal()" [dailyCalorieGoal]="dailyCalories()"
+                (addFood)="handleAddFood($event)" (deleteFood)="handleDeleteFood($event)"
+                (weightUpdate)="handleWeightUpdate($event)">
             </app-dashboard-bottom>
         </div>
     </main>

@@ -52,7 +52,20 @@ export class AuthService {
   }
 
   updateProfile(data: Partial<User>): void {
-    this.currentUser.update(user => user ? { ...user, ...data, isProfileComplete: true } : null);
+    this.currentUser.update(user => user ? {
+      ...user,
+      ...data,
+      startingWeight: user.startingWeight ?? data.weight ?? user.weight,
+      isProfileComplete: true
+    } : null);
+  }
+
+  updateWeight(weight: number): void {
+    this.currentUser.update(user => user ? {
+      ...user,
+      startingWeight: user.startingWeight ?? user.weight,
+      weight
+    } : null);
   }
 
   logout(): void {
