@@ -1,14 +1,72 @@
 @use '../../../../styles' as *;
 :host { display: contents; }
 .bottom-grid { display: contents; }
-.eat-card { grid-area: eat; background-color: $bg-card; border-radius: $radius-md; padding: 24px; box-shadow: $shadow-sm; }
+.eat-card { grid-area: eat; min-width: 0; background-color: $bg-card; border-radius: $radius-md; padding: 24px; box-shadow: $shadow-sm; }
 .card-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
-.food-list { display: flex; flex-direction: column; gap: 16px; }
+.food-header, .food-entry-header, .food-entry-actions, .food-total {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+}
+.food-header, .food-entry-header, .food-total { justify-content: space-between; }
+.food-header { margin-bottom: 16px; }
+.food-header .card-title { margin: 0; }
+.food-button, .btn-delete {
+    border-radius: $radius-sm;
+    padding: 8px 12px;
+    font: inherit;
+    font-weight: 600;
+}
+.food-button--primary {
+    background: #28712d;
+    color: white;
+
+    &:hover:not(:disabled) { background: #205b24; }
+    &:disabled { background: #e0e0e0; color: #616161; cursor: default; }
+}
+.food-button--secondary { background: white; color: #27662b; border: 1px solid $border-color; }
+.eat-card :is(button, input, select):focus-visible { outline: 2px solid #28712d; outline-offset: 2px; }
+.food-entry {
+    display: grid;
+    gap: 12px;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    margin-bottom: 16px;
+    padding: 16px;
+    background: #fafafa;
+}
+.food-amounts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+    gap: 12px;
+}
+.food-field {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+    font-weight: 600;
+
+    input, select {
+        width: 100%;
+        min-width: 0;
+        padding: 8px;
+        border: 1px solid $border-color;
+        border-radius: $radius-sm;
+        background: white;
+        color: $text-primary;
+        font: inherit;
+        font-weight: 400;
+    }
+}
+.food-note { color: $text-secondary; font-size: 13px; }
+.food-total { padding: 10px 12px; background: $nutrit-green-bg; border-radius: $radius-sm; }
+.food-entry-actions { justify-content: flex-end; }
+.food-list { display: flex; flex-direction: column; gap: 12px; }
 .food-item {
     display: flex; align-items: center; gap: 14px; padding: 12px; background-color: #FAFAFA; border-radius: $radius-sm;
-    .food-info { flex: 1; h4 { font-size: 14px; margin-bottom: 2px; } p { font-size: 12px; color: $text-secondary; } }
-    .btn-add { width: 32px; height: 32px; border-radius: 50%; background-color: $nutrit-green; color: white; font-weight: bold; }
-    .btn-delete { width: 32px; height: 32px; border-radius: 50%; background-color: transparent; color: red; font-weight: bold; }
+    .food-info { flex: 1; min-width: 0; overflow-wrap: anywhere; h4 { font-size: 14px; margin-bottom: 2px; } p { font-size: 12px; color: $text-secondary; } }
+    .btn-delete { background: transparent; color: #a32721; }
 }
 .progress-card { grid-area: progress; background-color: $bg-card; border-radius: $radius-md; padding: 24px; box-shadow: $shadow-sm; }
 .profile-card { grid-area: profile; background-color: $bg-card; border-radius: $radius-md; padding: 24px; box-shadow: $shadow-sm; }
