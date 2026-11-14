@@ -48,30 +48,42 @@ export class DashboardBottom {
     return { name: food.name, grams, kcal };
   });
 
-  protected toggleEntry(trigger: HTMLButtonElement) {
-    if (this.entryOpen()) {
-      this.closeEntry(trigger);
-      return;
-    }
-    this.entryOpen.set(true);
-  }
-
-  protected closeEntry(trigger: HTMLButtonElement) {
-    this.entryOpen.set(false);
+  protected resetEntry() {
     this.entryMode.set('catalog');
     this.selectedName.set('');
     this.manualName.set('');
     this.grams.set(null);
     this.manualKcal.set(null);
+  }
+
+  protected openEntry(dialog: HTMLDialogElement) {
+    this.resetEntry();
+    this.entryOpen.set(true);
+    dialog.showModal();
+  }
+
+  protected closeEntry(dialog: HTMLDialogElement) {
+    if (dialog.open) dialog.close();
+  }
+
+  protected closeEntryFromBackdrop(event: MouseEvent, dialog: HTMLDialogElement) {
+    if (event.target === dialog) this.closeEntry(dialog);
+  }
+
+  protected onDialogClose(trigger: HTMLButtonElement) {
+    this.entryOpen.set(false);
+    this.resetEntry();
     trigger.focus();
   }
 
-  protected saveFood(event: Event, trigger: HTMLButtonElement) {
+  protected saveFood(event: Event, dialog: HTMLDialogElement) {
     event.preventDefault();
+
     const entry = this.entry();
     if (!entry) return;
+
     this.addFood.emit(entry);
-    this.closeEntry(trigger);
+    dialog.close();
   }
 
   onDeleteClick(id: number) { this.deleteFood.emit(id); }

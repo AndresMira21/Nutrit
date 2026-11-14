@@ -26,15 +26,50 @@
     &:disabled { background: #e0e0e0; color: #616161; cursor: default; }
 }
 .food-button--secondary { background: white; color: #27662b; border: 1px solid $border-color; }
-.eat-card :is(button, input, select):focus-visible { outline: 2px solid #28712d; outline-offset: 2px; }
+.eat-card :is(button, input, select):focus-visible,
+.food-entry-dialog :is(button, input, select):focus-visible {
+    outline: 2px solid #28712d;
+    outline-offset: 2px;
+}
+.food-entry-dialog {
+    width: min(520px, calc(100% - 24px));
+    max-width: none;
+    max-height: calc(100dvh - 24px);
+    margin: auto;
+    padding: 0;
+    overflow: visible;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    background: $bg-card;
+    color: $text-primary;
+    box-shadow: 0 20px 60px rgb(0 0 0 / 24%);
+
+    &::backdrop { background: rgb(20 32 22 / 48%); }
+}
 .food-entry {
     display: grid;
     gap: 12px;
+    width: 100%;
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    padding: 24px;
+}
+.food-entry-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.food-button--close {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    padding: 0;
     border: 1px solid $border-color;
-    border-radius: $radius-md;
-    margin-bottom: 16px;
-    padding: 16px;
-    background: #fafafa;
+    background: white;
+    color: $text-primary;
+    font-size: 24px;
+    line-height: 1;
 }
 .food-amounts {
     display: grid;
@@ -62,6 +97,9 @@
 .food-note { color: $text-secondary; font-size: 13px; }
 .food-total { padding: 10px 12px; background: $nutrit-green-bg; border-radius: $radius-sm; }
 .food-entry-actions { justify-content: flex-end; }
+@media (max-width: 520px) {
+    .food-entry { padding: 18px; }
+}
 .food-list { display: flex; flex-direction: column; gap: 12px; }
 .food-item {
     display: flex; align-items: center; gap: 14px; padding: 12px; background-color: #FAFAFA; border-radius: $radius-sm;

@@ -8,86 +8,96 @@
                 class="food-button food-button--primary"
                 [attr.aria-expanded]="entryOpen()"
                 [attr.aria-controls]="entryOpen() ? 'food-entry' : null"
-                (click)="toggleEntry(addButton)">
+                (click)="openEntry(foodDialog)">
                 Agregar comida
             </button>
         </div>
 
-        @if (entryOpen()) {
-            <form
-                id="food-entry"
-                class="food-entry"
-                aria-labelledby="food-entry-title"
-                (submit)="saveFood($event, addButton)"
-                (keydown.escape)="closeEntry(addButton)">
-                <div class="food-entry-header">
-                    <h4 id="food-entry-title">
-                        {{ entryMode() === 'catalog' ? 'Elegir alimento' : 'Nueva comida manual' }}
-                    </h4>
-                    <button
-                        type="button"
-                        class="food-button food-button--secondary"
-                        (click)="entryMode.set(entryMode() === 'catalog' ? 'manual' : 'catalog')">
-                        {{ entryMode() === 'catalog' ? 'Crear comida manual' : 'Volver al catálogo' }}
-                    </button>
-                </div>
+        <dialog
+            #foodDialog
+            id="food-entry"
+            class="food-entry-dialog"
+            aria-labelledby="food-entry-title"
+            (click)="closeEntryFromBackdrop($event, foodDialog)"
+            (close)="onDialogClose(addButton)">
+                <form class="food-entry" (submit)="saveFood($event, foodDialog)">
+                    <div class="food-entry-header">
+                        <h4 id="food-entry-title">
+                            {{ entryMode() === 'catalog' ? 'Elegir alimento' : 'Nueva comida manual' }}
+                        </h4>
+                        <div class="food-entry-header-actions">
+                            <button
+                                type="button"
+                                class="food-button food-button--secondary"
+                                (click)="entryMode.set(entryMode() === 'catalog' ? 'manual' : 'catalog')">
+                                {{ entryMode() === 'catalog' ? 'Crear comida manual' : 'Volver al catálogo' }}
+                            </button>
+                            <button
+                                type="button"
+                                class="food-button food-button--close"
+                                aria-label="Cerrar ventana"
+                                (click)="closeEntry(foodDialog)">
+                                &times;
+                            </button>
+                        </div>
+                    </div>
 
-                @if (entryMode() === 'catalog') {
-                    <label class="food-field">
-                        Alimento
-                        <select #foodSelect required (change)="selectedName.set(foodSelect.value)">
-                            <option value="">Selecciona un alimento</option>
-                            @for (food of catalog; track food.name) {
-                                <option [value]="food.name" [selected]="food.name === selectedName()">
-                                    {{ food.name }} · {{ food.kcalPer100g }} kcal / 100 g
-                                </option>
-                            }
-                        </select>
-                    </label>
-                    <p class="food-note">Valores aproximados según la preparación indicada.</p>
-                } @else {
-                    <label class="food-field">
-                        Nombre de la comida
-                        <input type="text" required [value]="manualName()" (input)="manualName.set($event.target.value)">
-                    </label>
-                }
-
-                <div class="food-amounts">
-                    <label class="food-field">
-                        Gramos consumidos
-                        <input #gramsInput type="number" min="0" step="any" required [value]="grams() ?? ''"
-                            (input)="grams.set(gramsInput.value === '' ? null : gramsInput.valueAsNumber)">
-                    </label>
-                    @if (entryMode() === 'manual') {
+                    @if (entryMode() === 'catalog') {
                         <label class="food-field">
-                            Calorías de la porción (kcal)
-                            <input #kcalInput type="number" min="0" step="any" required [value]="manualKcal() ?? ''"
-                                (input)="manualKcal.set(kcalInput.value === '' ? null : kcalInput.valueAsNumber)">
+                            Alimento
+                            <select #foodSelect required autofocus (change)="selectedName.set(foodSelect.value)">
+                                <option value="">Selecciona un alimento</option>
+                                @for (food of catalog; track food.name) {
+                                    <option [value]="food.name" [selected]="food.name === selectedName()">
+                                        {{ food.name }} · {{ food.kcalPer100g }} kcal / 100 g
+                                    </option>
+                                }
+                            </select>
+                        </label>
+                        <p class="food-note">Valores aproximados según la preparación indicada.</p>
+                    } @else {
+                        <label class="food-field">
+                            Nombre de la comida
+                            <input type="text" required autofocus [value]="manualName()" (input)="manualName.set($event.target.value)">
                         </label>
                     }
-                </div>
 
-                <div class="food-total" role="status">
-                    <span>Total de la comida</span>
-                    <strong>
-                        @if (entry(); as food) {
-                            {{ food.kcal | number:'1.0-2' }} kcal
-                        } @else {
-                            —
+                    <div class="food-amounts">
+                        <label class="food-field">
+                            Gramos consumidos
+                            <input #gramsInput type="number" min="0" step="any" required [value]="grams() ?? ''"
+                                (input)="grams.set(gramsInput.value === '' ? null : gramsInput.valueAsNumber)">
+                        </label>
+                        @if (entryMode() === 'manual') {
+                            <label class="food-field">
+                                Calorías de la porción (kcal)
+                                <input #kcalInput type="number" min="0" step="any" required [value]="manualKcal() ?? ''"
+                                    (input)="manualKcal.set(kcalInput.value === '' ? null : kcalInput.valueAsNumber)">
+                            </label>
                         }
-                    </strong>
-                </div>
+                    </div>
 
-                <div class="food-entry-actions">
-                    <button type="button" class="food-button food-button--secondary" (click)="closeEntry(addButton)">
-                        Cancelar
-                    </button>
-                    <button type="submit" class="food-button food-button--primary" [disabled]="!entry()">
-                        Guardar comida
-                    </button>
-                </div>
-            </form>
-        }
+                    <div class="food-total" role="status">
+                        <span>Total de la comida</span>
+                        <strong>
+                            @if (entry(); as food) {
+                                {{ food.kcal | number:'1.0-2' }} kcal
+                            } @else {
+                                —
+                            }
+                        </strong>
+                    </div>
+
+                    <div class="food-entry-actions">
+                        <button type="button" class="food-button food-button--secondary" (click)="closeEntry(foodDialog)">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="food-button food-button--primary" [disabled]="!entry()">
+                            Guardar comida
+                        </button>
+                    </div>
+                </form>
+        </dialog>
 
         <div class="food-list">
             @for (food of foods(); track food.id) {
