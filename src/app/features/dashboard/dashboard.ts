@@ -4,6 +4,7 @@ import { DashboardTop } from './dashboard-top/dashboard-top';
 import { DashboardBottom } from './dashboard-bottom/dashboard-bottom';
 import { AuthService } from '../../core/services/auth.service';
 import { NutritionService } from '../../core/services/nutrition.service';
+import { FoodEntry } from '../../core/models/food.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,8 +31,8 @@ export class Dashboard {
     return Math.round(bmr * 1.2);
   });
 
-  handleAddFood(newFoodData: { name: string, kcal: number }) {
-    this.nutrition.addFood({ id: Date.now(), ...newFoodData });
+  handleAddFood(entry: FoodEntry) {
+    this.nutrition.addFood(entry);
   }
 
   handleDeleteFood(id: number) {
