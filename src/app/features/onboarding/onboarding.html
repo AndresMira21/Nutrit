@@ -1,9 +1,7 @@
-<div class="login-page">
-  <div class="login-panel onboarding-panel">
-    <div class="login-form-container">
-      <h1 class="login-title">Completa tu perfil</h1>
-
-      <!-- Indicador de pasos: Property Binding sobre class y style -->
+<div class="onboarding-wrapper">
+  <div class="onboarding-card">
+    
+    <div class="progress-header">
       <ol class="steps" aria-label="Progreso del registro">
         @for (label of stepLabels; track $index) {
           <li [class.active]="step() === $index + 1" [class.done]="step() > $index + 1">
@@ -11,204 +9,26 @@
           </li>
         }
       </ol>
-      <div class="progress">
+      <div class="progress-bar">
         <div class="progress-fill" [style.width.%]="progress()"></div>
       </div>
-
-      <form class="login-form" [formGroup]="onboardingForm" (ngSubmit)="saveProfile()" novalidate>
-
-        <!-- ===================== PASO 1: DATOS PERSONALES ===================== -->
-        @if (step() === 1) {
-          <div formGroupName="personal">
-
-            <div class="form-group">
-              <label for="name">¿Cómo te llamas?</label>
-              <input id="name" type="text" formControlName="name"
-                     placeholder="Ej: Andrés Mira" autocomplete="name"
-                     [class.invalid]="showError(p.name)"
-                     [attr.aria-invalid]="showError(p.name)"
-                     (blur)="formatName()">
-              @if (showError(p.name)) {
-                <span class="field-error">
-                  @if (p.name.hasError('required')) { El nombre es obligatorio }
-                  @else if (p.name.hasError('minlength')) { Mínimo 2 caracteres }
-                  @else { Solo letras y espacios }
-                </span>
-              }
-            </div>
-
-            @for (field of numericFields; track field.control) {
-              <div class="form-group">
-                <label [for]="field.control">{{ field.label }}</label>
-                <input type="number"
-                       [id]="field.control"
-                       [formControlName]="field.control"
-                       [min]="field.min" [max]="field.max"
-                       [class.invalid]="showError(p[field.control])">
-                @if (showError(p[field.control])) {
-                  <span class="field-error">Debe estar entre {{ field.min }} y {{ field.max }}</span>
-                }
-              </div>
-            }
-
-            <div class="form-group">
-              <label>Género</label>
-              <div class="options">
-                @for (g of genders; track g.value) {
-                  <button type="button" class="option"
-                          [class.active]="p.gender.value === g.value"
-                          [attr.aria-pressed]="p.gender.value === g.value"
-                          (click)="selectGender(g.value)">
-                    {{ g.label }}
-                  </button>
-                }
-              </div>
-            </div>
-
-            @if (p.name.value) {
-              <p class="live-preview">
-                Hola, <strong>{{ p.name.value }}</strong>. Tu IMC estimado es
-                <strong>{{ bmiPreview() | number:'1.1-1' }}</strong>
-              </p>
-            }
-
-            <div class="actions">
-              <button type="button" class="btn-login" (click)="next()">Siguiente</button>
-            </div>
-          </div>
-        }
-
-        <!-- ===================== PASO 2: HÁBITOS ===================== -->
-        @if (step() === 2) {
-          <div formGroupName="habits">
-
-            <!-- ¿Se ejercita? -->
-            <fieldset class="form-group">
-              <legend>¿Haces ejercicio regularmente?</legend>
-              <div class="options">
-                @for (o of yesNo; track o.label) {
-                  <label class="option" [class.active]="h.exercises.value === o.value">
-                    <input type="radio" formControlName="exercises" [value]="o.value">
-                    {{ o.label }}
-                  </label>
-                }
-              </div>
-            </fieldset>
-
-            @if (h.exercises.value) {
-              <div class="form-group">
-                <label for="exerciseType">¿Qué tipo de ejercicio?</label>
-                <select id="exerciseType" formControlName="exerciseType">
-                  @for (t of exerciseTypes; track t.value) {
-                    <option [value]="t.value">{{ t.label }}</option>
-                  }
-                </select>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="days">Días por semana</label>
-                  <input id="days" type="number" formControlName="exerciseDaysPerWeek"
-                         [min]="1" [max]="7"
-                         [class.invalid]="showError(h.exerciseDaysPerWeek)">
-                  @if (showError(h.exerciseDaysPerWeek)) {
-                    <span class="field-error">Entre 1 y 7</span>
-                  }
-                </div>
-                <div class="form-group">
-                  <label for="minutes">Minutos por sesión</label>
-                  <input id="minutes" type="number" formControlName="exerciseMinutes"
-                         [min]="10" [max]="240"
-                         [class.invalid]="showError(h.exerciseMinutes)">
-                  @if (showError(h.exerciseMinutes)) {
-                    <span class="field-error">Entre 10 y 240</span>
-                  }
-                </div>
-              </div>
-            }
-
-            <!-- Nivel de actividad diaria -->
-            <div class="form-group">
-              <label for="activityLevel">Actividad en tu día a día</label>
-              <select id="activityLevel" formControlName="activityLevel">
-                @for (a of activityLevels; track a.value) {
-                  <option [value]="a.value">{{ a.label }}</option>
-                }
-              </select>
-            </div>
-
-            <!-- Comidas por día: Two-Way Binding con el componente hijo -->
-            <div class="form-group">
-              <label>¿Cuántas comidas haces al día?</label>
-              <app-number-stepper [(value)]="mealsPerDay" [min]="1" [max]="8" unit="comidas" />
-            </div>
-
-            <!-- Qué comidas hace (checkboxes + validador personalizado) -->
-            <fieldset class="form-group" formGroupName="meals">
-              <legend>¿Cuáles sueles hacer?</legend>
-              <div class="options">
-                @for (m of mealOptions; track m.key) {
-                  <label class="option" [class.active]="h.meals.controls[m.key].value">
-                    <input type="checkbox" [formControlName]="m.key"> {{ m.label }}
-                  </label>
-                }
-              </div>
-              @if (showError(h.meals)) {
-                <span class="field-error">Selecciona al menos una comida</span>
-              }
-            </fieldset>
-
-            <!-- Agua -->
-            <div class="form-group">
-              <label>Vasos de agua al día</label>
-              <app-number-stepper [(value)]="waterGlasses" [min]="0" [max]="20" unit="vasos" />
-            </div>
-
-            <!-- Tipo de dieta y objetivo -->
-            <div class="form-row">
-              <div class="form-group">
-                <label for="dietType">Tipo de alimentación</label>
-                <select id="dietType" formControlName="dietType">
-                  @for (d of dietTypes; track d.value) {
-                    <option [value]="d.value">{{ d.label }}</option>
-                  }
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="goal">Tu objetivo</label>
-                <select id="goal" formControlName="goal">
-                  @for (g of goals; track g.value) {
-                    <option [value]="g.value">{{ g.label }}</option>
-                  }
-                </select>
-              </div>
-            </div>
-
-            <!-- Restricciones con contador -->
-            <div class="form-group">
-              <label for="restrictions">Alergias o restricciones (opcional)</label>
-              <textarea id="restrictions" rows="3" formControlName="restrictions"
-                        placeholder="Ej: intolerancia a la lactosa"
-                        [attr.maxlength]="restrictionsMax"></textarea>
-              <span class="counter">{{ h.restrictions.value.length }}/{{ restrictionsMax }}</span>
-            </div>
-
-            <!-- Two-Way Binding con ngModel (standalone dentro de un formGroup) -->
-            <label class="terms">
-              <input type="checkbox" [(ngModel)]="acceptTerms" [ngModelOptions]="{ standalone: true }">
-              Acepto el tratamiento de mis datos personales
-            </label>
-
-            <div class="actions">
-              <button type="button" class="btn-secondary" (click)="back()">Atrás</button>
-              <button type="submit" class="btn-login"
-                      [disabled]="onboardingForm.invalid || !acceptTerms()">
-                Calcular mi dieta
-              </button>
-            </div>
-          </div>
-        }
-      </form>
     </div>
+
+    <form [formGroup]="onboardingForm" (ngSubmit)="saveProfile()" novalidate>
+      @if (step() === 1) {
+        <app-step-personal [group]="personalGroup"></app-step-personal>
+        <button type="button" class="btn-primary" (click)="next()">Siguiente paso</button>
+      }
+
+      @if (step() === 2) {
+        <app-step-habits [group]="habitsGroup" [mealsGroup]="mealsGroup"></app-step-habits>
+        <div class="button-row">
+          <button type="button" class="btn-secondary" (click)="back()">Atrás</button>
+          <button type="submit" class="btn-primary" [disabled]="isLoading()">
+            {{ isLoading() ? 'Calculando...' : 'Finalizar' }}
+          </button>
+        </div>
+      }
+    </form>
   </div>
 </div>

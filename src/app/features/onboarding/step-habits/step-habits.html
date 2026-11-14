@@ -1,0 +1,39 @@
+<div [formGroup]="group()" class="step-container">
+  <h2 class="step-title">Tus hábitos</h2>
+
+  <div class="form-group">
+    <label>¿Haces ejercicio regularmente?</label>
+    <div class="pills-grid">
+      <label class="pill" [class.active]="group().get('exercises')?.value === true">
+        <input type="radio" formControlName="exercises" [value]="true" hidden> Sí
+      </label>
+      <label class="pill" [class.active]="group().get('exercises')?.value === false">
+        <input type="radio" formControlName="exercises" [value]="false" hidden> No
+      </label>
+    </div>
+  </div>
+
+  <div class="stepper-box">
+    <label>Comidas al día</label>
+    <app-number-stepper formControlName="mealsPerDay" [min]="1" [max]="8" unit="comidas" />
+  </div>
+
+  <div class="stepper-box">
+    <label>Vasos de agua al día</label>
+    <app-number-stepper formControlName="waterGlasses" [min]="0" [max]="20" unit="vasos" />
+  </div>
+
+  <div class="form-group">
+    <label>Objetivo principal</label>
+    <select formControlName="goal" class="fitness-input">
+      <option value="lose">Bajar de peso</option>
+      <option value="maintain">Mantener peso</option>
+      <option value="gain">Ganar músculo</option>
+    </select>
+  </div>
+
+  <label class="terms-checkbox">
+    <input type="checkbox" formControlName="acceptTerms">
+    Acepto el tratamiento de mis datos
+  </label>
+</div>

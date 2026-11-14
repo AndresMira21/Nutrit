@@ -1,0 +1,36 @@
+<div [formGroup]="group()" class="step-container">
+  <h2 class="step-title">Cuéntanos de ti</h2>
+  
+  <div class="form-group">
+    <label>¿Cómo te llamas?</label>
+    <input type="text" formControlName="name" class="fitness-input" placeholder="Tu nombre completo">
+  </div>
+  
+  <div class="row">
+    <div class="col">
+      <label>Peso (kg)</label>
+      <input type="number" formControlName="weight" class="fitness-input">
+    </div>
+    <div class="col">
+      <label>Estatura (cm)</label>
+      <input type="number" formControlName="height" class="fitness-input">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Edad</label>
+    <input type="number" formControlName="age" class="fitness-input">
+  </div>
+
+  <div class="form-group">
+    <label>Género</label>
+    <div class="pills-grid">
+      <label class="pill" [class.active]="group().get('gender')?.value === 'male'">
+        <input type="radio" formControlName="gender" value="male" hidden> Hombre
+      </label>
+      <label class="pill" [class.active]="group().get('gender')?.value === 'female'">
+        <input type="radio" formControlName="gender" value="female" hidden> Mujer
+      </label>
+    </div>
+  </div>
+</div>
