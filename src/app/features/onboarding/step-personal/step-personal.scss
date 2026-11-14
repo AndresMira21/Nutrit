@@ -1,0 +1,8 @@
+.step-title { font-size: 28px; font-weight: 800; color: #1a1a1a; margin-bottom: 24px; text-align: center; }
+.form-group { margin-bottom: 20px; }
+label { font-size: 14px; font-weight: 700; color: #757575; margin-bottom: 8px; display: block; }
+.fitness-input { width: 100%; padding: 16px; background: #F3F4F6; border: 2px solid transparent; border-radius: 16px; font-size: 16px; font-weight: 600; color: #1a1a1a; transition: all 0.2s; &:focus { background: #FFF; border-color: #4CAF50; outline: none; box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.1); } }
+.row { display: flex; gap: 16px; }
+.col { flex: 1; }
+.pills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pill { padding: 16px; text-align: center; border-radius: 16px; background: #F3F4F6; color: #757575; font-weight: 700; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; &.active { background: rgba(76, 175, 80, 0.1); border-color: #4CAF50; color: #4CAF50; } }
