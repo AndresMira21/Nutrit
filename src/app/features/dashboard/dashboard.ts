@@ -5,6 +5,7 @@ import { DashboardBottom } from './dashboard-bottom/dashboard-bottom';
 import { AuthService } from '../../core/services/auth.service';
 import { NutritionService } from '../../core/services/nutrition.service';
 import { FoodEntry } from '../../core/models/food.model';
+import { User } from '../../core/models/user.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -41,6 +42,10 @@ export class Dashboard {
 
   handleWeightUpdate(weight: number) {
     this.auth.updateWeight(weight);
+  }
+
+  handleProfileUpdate(data: Partial<User>): void {
+    this.auth.updateProfile(data);
   }
 
   logout() {
