@@ -181,19 +181,6 @@
                 {{ calorieProgress() | number:'1.0-0' }}% de tu meta diaria estimada
             </p>
         </div>
-
-        <div class="progress-section">
-            <h4 class="section-subtitle">Logros</h4>
-            <div class="achievements">
-                @for (achievement of achievements(); track achievement.id) {
-                    <div class="achievement-item">
-                        <span class="achievement-icon">{{ achievement.icon }}</span>
-                        <p>{{ achievement.name }}</p>
-                    </div>
-                }
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="profile-card">
