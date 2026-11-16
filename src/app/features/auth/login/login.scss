@@ -1,14 +1,265 @@
+
 @use '../../../../styles' as *;
-.login-page { display: flex; min-height: 100vh; background-color: $bg-card; }
-.login-visual { flex: 1; background-color: $nutrit-green; display: flex; align-items: center; justify-content: center; padding: 60px; }
-.visual-image { width: 100%; max-width: 500px; aspect-ratio: 1 / 1; }
-.image-placeholder { width: 100%; height: 100%; background-color: #FFFFFF; border: 2px solid #1B4332; }
-.login-panel { flex: 1; display: flex; align-items: center; justify-content: center; padding: 60px 40px; }
-.login-form-container { width: 100%; max-width: 380px; text-align: center; }
-.brand { margin-bottom: 32px; .brand-name { font-size: 26px; font-weight: 700; color: $nutrit-green; } }
-.login-title { font-size: 22px; font-weight: 700; margin-bottom: 32px; }
+
+// Página principal
+.login-page {
+  display: flex;
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+
+// Panel izquierdo
+.login-visual {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 55px;
+  background: #e8ede4;
+}
+
+.visual-content {
+  width: 100%;
+  max-width: 480px;
+}
+
+.visual-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+}
+
+.visual-logo {
+  width: 125px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.visual-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #6b816e;
+}
+
+.visual-image {
+  width: 100%;
+  height: 290px;
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 35px;
+}
+
+.visual-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.visual-text h2 {
+  font-size: 35px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #233e2d;
+  margin-bottom: 18px;
+}
+
+.visual-text p {
+  font-size: 14px;
+  color: #617465;
+  line-height: 1.8;
+  max-width: 400px;
+}
+
+.visual-bottom {
+  display: flex;
+  gap: 7px;
+  margin-top: 40px;
+}
+
+.line {
+  width: 12px;
+  height: 4px;
+  border-radius: 10px;
+  background: #b9cbbb;
+}
+
+.line.active {
+  width: 32px;
+  background: #326c49;
+}
+
+
+// Panel derecho
+.login-panel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 35px;
+}
+
+.login-form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+// Logo
+.brand {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.brand-logo {
+  width: 190px;
+  max-width: 100%;
+  height: auto;
+}
+
+// Títulos
+.login-title {
+  color: #1b4332;
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.login-subtitle {
+  color: #757575;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 35px;
+}
+
+// Formulario
 .login-form {
-    display: flex; flex-direction: column; gap: 18px; text-align: left;
-    .form-group { display: flex; flex-direction: column; gap: 6px; label { font-size: 13px; font-weight: 500; } input { padding: 12px; border: 1px solid $border-color; border-radius: $radius-sm; } }
-    .btn-login { padding: 14px; background-color: $nutrit-green; color: white; font-weight: 600; border-radius: $radius-sm; &:disabled { opacity: 0.6; } }
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  color: #344e41;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #d9e2d9;
+  border-radius: 10px;
+  background: #ffffff;
+  font-size: 14px;
+  font-family: inherit;
+  color: #263c2e;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.12);
+}
+
+.form-group input::placeholder {
+  color: #a0aaa0;
+}
+
+// Errores de validación
+.error-text {
+  color: #d32f2f;
+  font-size: 12px;
+}
+
+.error-message {
+  color: #c62828;
+  background: #ffebee;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 13px;
+}
+
+// Botón principal
+.btn-login {
+  width: 100%;
+  padding: 15px;
+  background: #388e3c;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-login:hover:not(:disabled) {
+  background: #2e7d32;
+  transform: translateY(-2px);
+}
+
+.btn-login:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-login:focus-visible {
+  outline: 3px solid #81c784;
+  outline-offset: 3px;
+}
+
+// Enlace para registro
+.signup-text {
+  margin-top: 28px;
+  text-align: center;
+  color: #757575;
+  font-size: 13px;
+}
+
+.signup-text a {
+  color: #388e3c;
+  font-weight: 700;
+}
+
+// Diseño responsive
+@media (max-width: 900px) {
+  .login-page {
+    flex-direction: column;
+  }
+
+  .login-visual {
+    display: none;
+  }
+
+  .login-panel {
+    min-height: 100vh;
+    padding: 30px 22px;
+  }
+
+  .login-title {
+    font-size: 25px;
+  }
+
+  .brand-logo {
+    width: 165px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-login,
+  .form-group input {
+    transition: none;
+  }
 }
