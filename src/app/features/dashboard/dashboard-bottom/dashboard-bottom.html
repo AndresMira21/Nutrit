@@ -77,16 +77,51 @@
                         }
                     </div>
 
+                    
                     <div class="food-total" role="status">
                         <span>Total de la comida</span>
+
                         <strong>
                             @if (entry(); as food) {
                                 {{ food.kcal | number:'1.0-2' }} kcal
                             } @else {
                                 —
+                    }
+                </strong>
+            </div>
+
+                            @if (entry(); as food) {
+                            @if (
+                                food.proteinG !== undefined &&
+                                food.carbsG !== undefined &&
+                                food.fatG !== undefined
+                            ) {
+                                <div class="food-macros-preview">
+                                <h5>Macronutrientes de esta porción</h5>
+
+                                <p>
+                                    Proteínas:
+                                    <strong>{{ food.proteinG | number:'1.0-2' }} g</strong>
+                                </p>
+
+                                <p>
+                                    Carbohidratos:
+                                    <strong>{{ food.carbsG | number:'1.0-2' }} g</strong>
+                                </p>
+
+                                <p>
+                                    Grasas:
+                                    <strong>{{ food.fatG | number:'1.0-2' }} g</strong>
+                                </p>
+                                </div>
+                            } @else {
+                                <p class="food-note">
+                                No hay información de macronutrientes para esta
+                                comida manual. Solo se registrarán sus calorías.
+                                </p>
                             }
-                        </strong>
-                    </div>
+                            }
+
 
                     <div class="food-entry-actions">
                         <button type="button" class="food-button food-button--secondary" (click)="closeEntry(foodDialog)">
@@ -99,25 +134,48 @@
                 </form>
         </dialog>
 
-        <div class="food-list">
-            @for (food of foods(); track food.id) {
-                <div class="food-item">
-                    <div class="food-info">
-                        <h4>{{ food.name }}</h4>
-                        <p>
-                            @if (food.grams !== undefined) {
-                                {{ food.grams | number:'1.0-2' }} g ·
-                            }
-                            {{ food.kcal | number:'1.0-2' }} kcal
-                        </p>
-                    </div>
-                    <button type="button" class="btn-delete" [attr.aria-label]="'Eliminar ' + food.name"
-                        (click)="onDeleteClick(food.id)">Eliminar</button>
-                </div>
-            } @empty {
-                <p class="food-note">No hay comidas registradas.</p>
-            }
+        
+<div class="food-list">
+    @for (food of foods(); track food.id) {
+        <div class="food-item">
+            <div class="food-info">
+                <h4>{{ food.name }}</h4>
+
+                <p>
+                    @if (food.grams !== undefined) {
+                        {{ food.grams | number:'1.0-2' }} g ·
+                    }
+                    {{ food.kcal | number:'1.0-2' }} kcal
+                </p>
+
+                @if (
+                    food.proteinG !== undefined &&
+                    food.carbsG !== undefined &&
+                    food.fatG !== undefined
+                ) {
+                    <p class="food-macros">
+                        Proteínas: {{ food.proteinG | number:'1.0-1' }} g ·
+                        Carbohidratos: {{ food.carbsG | number:'1.0-1' }} g ·
+                        Grasas: {{ food.fatG | number:'1.0-1' }} g
+                    </p>
+                }
+            </div>
+
+            <button
+                type="button"
+                class="btn-delete"
+                [attr.aria-label]="'Eliminar ' + food.name"
+                (click)="onDeleteClick(food.id)">
+                Eliminar
+            </button>
         </div>
+    } @empty {
+        <p class="food-note">
+            No hay comidas registradas.
+        </p>
+    }
+</div>
+
     </section>
 
     <div class="progress-card">

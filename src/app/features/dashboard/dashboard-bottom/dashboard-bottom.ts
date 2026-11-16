@@ -5,6 +5,10 @@ import { Achievement } from '../../../core/models/achievement.model';
 import { User } from '../../../core/models/user.model';
 import { FOOD_CATALOG } from './food-catalog';
 import { ProfileEditor } from '../profile-editor/profile-editor';
+import { inject } from '@angular/core';
+import { MacronutrientCalculatorService } from
+  '../../../core/services/macronutrient-calculator.service';
+
 
 @Component({
   selector: 'app-dashboard-bottom',
@@ -59,9 +63,24 @@ export class DashboardBottom {
     const food = this.catalog.find(option => option.name === this.selectedName());
     if (!food) return null;
 
-    const kcal = (grams / 100) * food.kcalPer100g;
-    if (!Number.isFinite(kcal)) return null;
-    return { name: food.name, grams, kcal };
+    
+const kcal = (grams / 100) * food.kcalPer100g;
+
+if (!Number.isFinite(kcal)) return null;
+
+// Calculamos los macronutrientes de la porción.
+const macros = this.macroCalculator.calculatePortion(
+  grams,
+  food
+);
+
+return {
+  name: food.name,
+  grams,
+  kcal,
+  ...macros
+};
+
   });
 
   protected resetEntry() {
@@ -116,4 +135,8 @@ export class DashboardBottom {
     this.profileUpdate.emit(data);
     this.profileEditing.set(false);
   }
+
+  private readonly macroCalculator =
+  inject(MacronutrientCalculatorService);
 }
+
