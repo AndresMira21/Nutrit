@@ -34,7 +34,8 @@
                 [user]="auth.currentUser()!" [bmi]="bmi()" [foods]="nutrition.foods()" [achievements]="nutrition.achievements()"
                 [todayKcal]="nutrition.todayKcal()" [dailyCalorieGoal]="dailyCalories()"
                 (addFood)="handleAddFood($event)" (deleteFood)="handleDeleteFood($event)"
-                (weightUpdate)="handleWeightUpdate($event)">
+                (weightUpdate)="handleWeightUpdate($event)"
+                (profileUpdate)="handleProfileUpdate($event)">
             </app-dashboard-bottom>
         </div>
     </main>

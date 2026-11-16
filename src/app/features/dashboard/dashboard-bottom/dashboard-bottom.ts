@@ -4,10 +4,11 @@ import { Food, FoodEntry } from '../../../core/models/food.model';
 import { Achievement } from '../../../core/models/achievement.model';
 import { User } from '../../../core/models/user.model';
 import { FOOD_CATALOG } from './food-catalog';
+import { ProfileEditor } from '../profile-editor/profile-editor';
 
 @Component({
   selector: 'app-dashboard-bottom',
-  imports: [DecimalPipe],
+  imports: [DecimalPipe, ProfileEditor],
   templateUrl: './dashboard-bottom.html',
   styleUrl: './dashboard-bottom.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -23,6 +24,9 @@ export class DashboardBottom {
   addFood = output<FoodEntry>();
   deleteFood = output<number>();
   weightUpdate = output<number>();
+  profileUpdate = output<Partial<User>>();
+
+  protected readonly profileEditing = signal(false);
 
   protected readonly catalog = FOOD_CATALOG;
   protected readonly entryOpen = signal(false);
@@ -107,4 +111,9 @@ export class DashboardBottom {
   }
 
   onDeleteClick(id: number) { this.deleteFood.emit(id); }
+
+  onProfileSaved(data: Partial<User>): void {
+    this.profileUpdate.emit(data);
+    this.profileEditing.set(false);
+  }
 }
