@@ -132,12 +132,40 @@
   </div>
 </section>
 
-<!-- La sección de macronutrientes se conserva sin cambios de funcionalidad. -->
-<div class="macros-card">
-  <h3 class="card-title">Macronutrients Today</h3>
+
+<section
+  class="macros-card"
+  aria-labelledby="macros-title">
+
+  <h3 id="macros-title" class="card-title">
+    Macronutrientes consumidos hoy
+  </h3>
+
   @defer (on viewport) {
-    <div class="chart-placeholder">Gráfico Pesado Cargado Correctamente</div>
+
+    <app-macronutrient-chart
+      [foods]="foods()">
+    </app-macronutrient-chart>
+
   } @placeholder {
-    <div class="chart-placeholder">Desliza para cargar el gráfico...</div>
+
+    <div class="chart-placeholder">
+      Preparando resumen nutricional...
+    </div>
+
+  } @loading {
+
+    <div class="chart-placeholder">
+      Cargando macronutrientes...
+    </div>
+
+  } @error {
+
+    <div class="chart-placeholder">
+      No se pudo cargar el resumen nutricional.
+    </div>
+
   }
-</div>
+
+</section>
+
