@@ -1,0 +1,128 @@
+
+<section class="macros-content" aria-label="Resumen de macronutrientes">
+
+  @if (todayFoods().length === 0) {
+
+    <div class="empty-state">
+      <div class="empty-icon">🥗</div>
+
+      <h4>¡Comienza tu registro de hoy!</h4>
+
+      <p>
+        Todavía no has registrado comidas.
+        Agrega un alimento para visualizar sus
+        proteínas, carbohidratos y grasas.
+      </p>
+    </div>
+
+  } @else if (foodsWithMacros() === 0) {
+
+    <div class="empty-state">
+      <div class="empty-icon">📊</div>
+
+      <h4>Aún no tenemos datos de macronutrientes</h4>
+
+      <p>
+        Tienes comidas registradas, pero no cuentan
+        con información de proteínas, carbohidratos
+        y grasas.
+      </p>
+
+      <p>
+        Los nuevos alimentos seleccionados del catálogo
+        sí incluirán esta información.
+      </p>
+    </div>
+
+  } @else {
+
+    <div class="macro-description">
+      <p>
+        Distribución estimada de los nutrientes
+        que has consumido hoy.
+      </p>
+    </div>
+
+    <div class="macro-grid">
+
+      @for (nutrient of nutrients(); track nutrient.name) {
+
+        <div class="macro-item">
+          <div class="macro-heading">
+            <span class="macro-name">
+              <span
+                class="macro-dot"
+                [style.background]="nutrient.color">
+              </span>
+              {{ nutrient.name }}
+            </span>
+
+            <strong>
+              {{ nutrient.grams | number:'1.0-1' }} g
+            </strong>
+          </div>
+
+          <div
+            class="macro-track"
+            role="progressbar"
+            [attr.aria-label]="'Proporción energética de ' + nutrient.name"
+            [attr.aria-valuenow]="nutrient.percentage"
+            aria-valuemin="0"
+            aria-valuemax="100">
+
+            <div
+              class="macro-fill"
+              [style.width.%]="nutrient.percentage"
+              [style.background]="nutrient.color">
+            </div>
+
+          </div>
+
+          <span class="macro-percent">
+            {{ nutrient.percentage | number:'1.0-1' }}%
+            de la energía de los macros conocidos
+          </span>
+        </div>
+
+      }
+
+    </div>
+
+    <div class="macro-footer">
+
+      <div>
+        <span>Energía estimada de estos macros</span>
+
+        <strong>
+          {{ macroEnergy() | number:'1.0-0' }} kcal
+        </strong>
+      </div>
+
+      <div>
+        <span>Comidas con datos nutricionales</span>
+
+        <strong>
+          {{ foodsWithMacros() }} / {{ todayFoods().length }}
+        </strong>
+      </div>
+
+    </div>
+
+    @if (totals().foodsWithoutMacros > 0) {
+      <p class="macro-warning">
+        Hay {{ totals().foodsWithoutMacros }}
+        comida(s) sin datos de macronutrientes.
+        El resumen incluye únicamente los nutrientes conocidos.
+      </p>
+    }
+
+    <p class="macro-note">
+      Los valores son aproximados. Los porcentajes
+      representan la distribución energética de los
+      macronutrientes registrados, no el cumplimiento
+      de una meta nutricional.
+    </p>
+
+  }
+
+</section>

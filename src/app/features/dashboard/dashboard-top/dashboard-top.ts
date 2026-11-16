@@ -9,10 +9,18 @@ import {
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DailyActivityService } from '../../../core/services/daily-activity.service';
+import { Food } from '../../../core/models/food.model';
+import { MacronutrientChart } from '../macronutrient-chart/macronutrient-chart';
+
 
 @Component({
   selector: 'app-dashboard-top',
-  imports: [DecimalPipe, DatePipe, ReactiveFormsModule],
+  imports: [
+  DecimalPipe,
+  DatePipe,
+  ReactiveFormsModule,
+  MacronutrientChart
+],
   templateUrl: './dashboard-top.html',
   styleUrl: './dashboard-top.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -21,6 +29,8 @@ export class DashboardTop implements OnInit, OnDestroy {
   water = input.required<string>();
   steps = input.required<string>();
   kcal = input.required<number>();
+  foods = input.required<Food[]>();
+
 
   protected readonly activity = inject(DailyActivityService);
   private readonly fb = inject(FormBuilder);
