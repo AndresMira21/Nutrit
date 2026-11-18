@@ -1,59 +1,181 @@
-# Nutrit
+# 🥗 Nutrit
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.2.
+**Nutrit** es una aplicación web de seguimiento nutricional y de hábitos saludables. Permite a cada usuario crear su perfil, conocer su meta calórica diaria, registrar sus comidas con calorías y macronutrientes, y llevar el control diario de agua, pasos y peso desde un único panel.
 
-## Development server
+Está desarrollada con Angular 22 usando componentes standalone, Signals y carga perezosa de rutas.
 
-To start a local development server, run:
+---
+
+## ✨ Funcionalidades
+
+### 🔐 Autenticación y perfil
+
+- Registro e inicio de sesión de usuarios.
+- Rutas protegidas con `authGuard` y `profileGuard`, que garantizan que el usuario tenga sesión y perfil completo antes de entrar al dashboard.
+- Onboarding en 2 pasos:
+  1. Datos personales: nombre, edad, sexo, peso y estatura.
+  2. Hábitos: actividad física, comidas por día, vasos de agua, tipo de dieta, objetivo y restricciones.
+- Edición posterior de datos personales y hábitos desde el dashboard.
+
+### 📊 Dashboard
+
+- Meta calórica diaria calculada a partir de los datos del perfil.
+- Índice de Masa Corporal (IMC) actual.
+- Seguimiento diario de agua (ml) y pasos, con barras de progreso, meta personal de pasos e historial de los últimos 7 días.
+- Calorías consumidas en el día, actualizadas automáticamente al registrar comidas.
+- Registro de peso con la variación respecto al peso inicial.
+
+### 🍽️ Comidas y macronutrientes
+
+- Registro de comidas desde un catálogo de alimentos (valores por 100 g) o de forma manual.
+- Cálculo automático de proteínas, carbohidratos y grasas según los gramos consumidos.
+- Gráfico de macronutrientes del día.
+- Cada cuenta de usuario conserva únicamente sus propios registros.
+
+---
+
+## 🧰 Tecnologías
+
+| Categoría | Herramienta |
+|---|---|
+| Framework | `Angular 22` |
+| Lenguaje | `TypeScript 6` |
+| Estilos | `SCSS` |
+| Formularios | `Reactive Forms` |
+| Enrutamiento | `Angular Router` con guards funcionales |
+| Pruebas | `Vitest` + `jsdom` |
+| Formato de código | `Prettier` + `EditorConfig` |
+| Persistencia | `localStorage` del navegador |
+
+---
+
+## 📋 Requisitos previos
+
+- `Node.js` (versión LTS reciente)
+- `npm` 11
+- `Angular CLI` (opcional, también se puede usar con `npx`)
+
+---
+
+## 🚀 Instalación y ejecución
 
 ```bash
-ng serve
+# Clonar el repositorio
+git clone https://github.com/AndresMira21/Nutrit.git
+cd Nutrit
+
+# Instalar dependencias
+npm install
+
+# Iniciar el servidor de desarrollo
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Abre el navegador en `http://localhost:4200/`. La aplicación se recarga automáticamente al modificar el código.
 
-## Code scaffolding
+### 🔑 Usuario de demostración
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```text
+Correo:      admin@nutrit.com
+Contraseña:  123456
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+También puedes crear tu propia cuenta desde la pantalla de registro.
 
-```bash
-ng generate --help
+---
+
+## 📜 Scripts disponibles
+
+| Comando | Descripción |
+|---|---|
+| `npm start` | Levanta el servidor de desarrollo |
+| `npm run build` | Genera la compilación de producción en `dist/` |
+| `npm run watch` | Compila en modo desarrollo y observa cambios |
+| `npm test` | Ejecuta las pruebas unitarias con Vitest |
+
+---
+
+## 📁 Estructura del proyecto
+
+```text
+src/
+├── app/
+│   ├── core/
+│   │   ├── guards/             # authGuard, profileGuard
+│   │   ├── models/             # User, Food, Achievement
+│   │   └── services/
+│   │       ├── auth.service.ts
+│   │       ├── nutrition.service.ts
+│   │       ├── macronutrient-calculator.service.ts
+│   │       └── daily-activity.service.ts
+│   ├── features/
+│   │   ├── auth/               # login y register
+│   │   ├── onboarding/         # step-personal y step-habits
+│   │   └── dashboard/
+│   │       ├── dashboard-top/
+│   │       ├── dashboard-bottom/
+│   │       ├── macronutrient-chart/
+│   │       └── profile-editor/
+│   ├── shared/
+│   │   └── number-stepper/
+│   ├── app.routes.ts
+│   └── app.config.ts
+├── styles.scss
+└── main.ts
+public/
+└── images/
 ```
 
-## Building
+### 🗺️ Rutas
 
-To build the project run:
+| Ruta | Descripción | Protección |
+|---|---|---|
+| `/login` | Inicio de sesión | Pública |
+| `/register` | Registro de usuario | Pública |
+| `/onboarding` | Configuración inicial del perfil | `authGuard` |
+| `/dashboard` | Panel principal | `authGuard` + `profileGuard` |
 
-```bash
-ng build
+---
+
+## 🧮 Cálculos nutricionales
+
+Meta calórica diaria (ecuación de Mifflin-St Jeor):
+
+```text
+TMB = (10 × peso[kg]) + (6.25 × estatura[cm]) − (5 × edad)
+TMB = TMB + 5      (hombres)
+TMB = TMB − 161    (mujeres)
+
+Meta diaria = TMB × 1.2
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Índice de Masa Corporal:
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
+```text
+IMC = peso[kg] / (estatura[m])²
 ```
 
-## Running end-to-end tests
+Macronutrientes por porción:
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
+```text
+macro = valor por 100 g × (gramos consumidos / 100)
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## 🌱 Flujo de trabajo con Git
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- `main`: versión estable.
+- `develop`: rama de integración.
+- `feature/*`: nuevas funcionalidades.
+- `fix/*`: correcciones.
+
+---
+
+## 👷 Autores
+
+- Andrés Camilo Miranda
+- Alejandra Montilla
+- Camilo Toro Sánchez
+
+🎓 Universidad Cooperativa de Colombia, Campus Pasto.
