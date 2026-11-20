@@ -1,6 +1,6 @@
 # 🥗 Nutrit
 
-**Nutrit** es una aplicación web de seguimiento nutricional y de hábitos saludables. Permite a cada usuario crear su perfil, conocer su meta calórica diaria, registrar sus comidas con calorías y macronutrientes, y llevar el control diario de agua, pasos y peso desde un único panel.
+**Nutrit** es una aplicación web de seguimiento nutricional y de hábitos. Permite crear un perfil, consultar una referencia calórica diaria, registrar comidas y llevar el control de agua, pasos y peso.
 
 Está desarrollada con Angular 22 usando componentes standalone, Signals y carga perezosa de rutas.
 
@@ -10,27 +10,29 @@ Está desarrollada con Angular 22 usando componentes standalone, Signals y carga
 
 ### 🔐 Autenticación y perfil
 
-- Registro e inicio de sesión de usuarios.
+- Registro e inicio de sesión local. Los correos se comparan sin distinguir mayúsculas y minúsculas y se eliminan los espacios de los extremos.
 - Rutas protegidas con `authGuard` y `profileGuard`, que garantizan que el usuario tenga sesión y perfil completo antes de entrar al dashboard.
 - Onboarding en 2 pasos:
   1. Datos personales: nombre, edad, sexo, peso y estatura.
-  2. Hábitos: actividad física, comidas por día, vasos de agua, tipo de dieta, objetivo y restricciones.
-- Edición posterior de datos personales y hábitos desde el dashboard.
+  2. Hábitos: frecuencia habitual de ejercicio (sí o no), cantidad de comidas y vasos de agua por día, objetivo y aceptación del tratamiento de datos para continuar.
+- Edición posterior de datos personales, meta, cantidades diarias y nivel de actividad opcional desde el dashboard.
+- Si ya existían dos cuentas con un correo equivalente, el acceso queda bloqueado para evitar que ambas usen los mismos registros. Los datos se conservan hasta que se resuelva su titularidad.
 
 ### 📊 Dashboard
 
-- Meta calórica diaria calculada a partir de los datos del perfil.
+- Referencia calórica diaria estimada para mantener el peso con actividad sedentaria.
 - Índice de Masa Corporal (IMC) actual.
 - Seguimiento diario de agua (ml) y pasos, con barras de progreso, meta personal de pasos e historial de los últimos 7 días.
-- Calorías consumidas en el día, actualizadas automáticamente al registrar comidas.
+- Calorías del día, actualizadas al registrar comidas o al cambiar la fecha local, y comparación con la referencia estimada.
 - Registro de peso con la variación respecto al peso inicial.
 
 ### 🍽️ Comidas y macronutrientes
 
 - Registro de comidas desde un catálogo de alimentos (valores por 100 g) o de forma manual.
-- Cálculo automático de proteínas, carbohidratos y grasas según los gramos consumidos.
-- Gráfico de macronutrientes del día.
-- Cada cuenta de usuario conserva únicamente sus propios registros.
+- El catálogo calcula calorías, proteínas, carbohidratos y grasas según los gramos consumidos. En el registro manual se ingresan las calorías de la porción.
+- El gráfico de macronutrientes usa las comidas del día con datos disponibles.
+- El historial conserva las comidas anteriores y las que no tienen fecha. Solo las fechadas hoy cuentan para el resumen diario.
+- Los registros de cada cuenta se almacenan en el navegador mediante `localStorage`.
 
 ---
 
@@ -139,15 +141,17 @@ public/
 
 ## 🧮 Cálculos nutricionales
 
-Meta calórica diaria (ecuación de Mifflin-St Jeor):
+Referencia calórica diaria (ecuación de Mifflin-St Jeor):
 
 ```text
 TMB = (10 × peso[kg]) + (6.25 × estatura[cm]) − (5 × edad)
 TMB = TMB + 5      (hombres)
 TMB = TMB − 161    (mujeres)
 
-Meta diaria = TMB × 1.2
+Referencia diaria = redondear(TMB × 1.2)
 ```
+
+El factor 1.2 representa actividad sedentaria. La referencia estima mantenimiento de peso y no se ajusta según el objetivo del perfil.
 
 Índice de Masa Corporal:
 

@@ -1,14 +1,10 @@
 import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
-import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { ActivityLevel, DietType, Goal, User } from '../../core/models/user.model';
+import { Goal, User } from '../../core/models/user.model';
 import { StepPersonal } from './step-personal/step-personal';
 import { StepHabits } from './step-habits/step-habits';
-
-const atLeastOneMeal = (group: AbstractControl): ValidationErrors | null =>
-  Object.values(group.value).some(Boolean) ? null : { noMeals: true };
 
 @Component({
   selector: 'app-onboarding',
@@ -26,23 +22,21 @@ export class Onboarding {
   step = signal<1 | 2>(1);
   progress = computed(() => this.step() * 50);
   isLoading = signal(false);
+  protected readonly triedPersonal = signal(false);
+  protected readonly triedHabits = signal(false);
 
   onboardingForm = this.fb.nonNullable.group({
     personal: this.fb.nonNullable.group({
-      name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[\p{L}' ]+$/u)]],
+      name: ['', [Validators.required, Validators.pattern(/^(?=(?:[^\p{L}]*\p{L}){2})[\p{L}' ]+$/u)]],
       weight: [70, [Validators.required, Validators.min(30), Validators.max(300)]],
       height: [175, [Validators.required, Validators.min(100), Validators.max(250)]],
-      age: [25, [Validators.required, Validators.min(15), Validators.max(100)]],
+      age: [25, [Validators.required, Validators.min(15), Validators.max(100), Validators.pattern(/^\d+$/)]],
       gender: ['male' as User['gender'], Validators.required]
     }),
     habits: this.fb.nonNullable.group({
       exercises: [false],
       mealsPerDay: [3, [Validators.required, Validators.min(1), Validators.max(8)]],
       waterGlasses: [6, [Validators.required, Validators.min(0), Validators.max(20)]],
-      meals: this.fb.nonNullable.group(
-        { breakfast: [true], lunch: [true], dinner: [true], snacks: [false] },
-        { validators: atLeastOneMeal }
-      ),
       goal: ['maintain' as Goal],
       acceptTerms: [false, Validators.requiredTrue]
     })
@@ -50,11 +44,11 @@ export class Onboarding {
 
   get personalGroup() { return this.onboardingForm.controls.personal; }
   get habitsGroup() { return this.onboardingForm.controls.habits; }
-  get mealsGroup() { return this.onboardingForm.controls.habits.controls.meals; }
 
   next() {
     if (this.personalGroup.invalid) {
       this.personalGroup.markAllAsTouched();
+      this.triedPersonal.set(true);
       return;
     }
     this.step.set(2);
@@ -65,6 +59,7 @@ export class Onboarding {
   saveProfile() {
     if (this.onboardingForm.invalid) {
       this.onboardingForm.markAllAsTouched();
+      this.triedHabits.set(true);
       return;
     }
 
@@ -76,7 +71,8 @@ export class Onboarding {
 
       this.authService.updateProfile({
         ...personal,
-        habits: validHabits as any
+        name: personal.name.trim(),
+        habits: { ...this.authService.currentUser()?.habits, ...validHabits }
       });
       this.router.navigate(['/dashboard']);
       this.isLoading.set(false);

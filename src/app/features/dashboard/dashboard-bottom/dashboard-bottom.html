@@ -167,7 +167,8 @@
               @if (food.grams !== undefined) {
                 {{ food.grams | number: '1.0-2' }} g ·
               }
-              {{ food.kcal | number: '1.0-2' }} kcal · {{ food.consumedOn || 'Sin fecha' }}
+              {{ food.kcal | number: '1.0-2' }} kcal ·
+              {{ food.consumedOn === today() ? 'Hoy' : (food.consumedOn || 'Sin fecha') }}
             </p>
 
             @if (

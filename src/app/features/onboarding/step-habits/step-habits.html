@@ -33,7 +33,11 @@
   </div>
 
   <label class="terms-checkbox">
-    <input type="checkbox" formControlName="acceptTerms">
+    <input type="checkbox" formControlName="acceptTerms"
+      [attr.aria-invalid]="showTermsError()" [attr.aria-describedby]="showTermsError() ? 'onboarding-terms-error' : null">
     Acepto el tratamiento de mis datos
   </label>
+  @if (showTermsError()) {
+    <p class="field-error" id="onboarding-terms-error">Acepta el tratamiento de tus datos para continuar.</p>
+  }
 </div>

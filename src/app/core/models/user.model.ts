@@ -4,16 +4,16 @@ export type DietType = 'omnivore' | 'vegetarian' | 'vegan' | 'other';
 
 export interface Habits {
   exercises: boolean;
-  exerciseType: string;
-  exerciseDaysPerWeek: number;
-  exerciseMinutes: number;
-  activityLevel: ActivityLevel;
+  exerciseType?: string;
+  exerciseDaysPerWeek?: number;
+  exerciseMinutes?: number;
+  activityLevel?: ActivityLevel;
   mealsPerDay: number;
-  meals: { breakfast: boolean; lunch: boolean; dinner: boolean; snacks: boolean };
+  meals?: { breakfast: boolean; lunch: boolean; dinner: boolean; snacks: boolean };
   waterGlasses: number;
-  dietType: DietType;
+  dietType?: DietType;
   goal: Goal;
-  restrictions: string;
+  restrictions?: string;
 }
 
 export interface User {

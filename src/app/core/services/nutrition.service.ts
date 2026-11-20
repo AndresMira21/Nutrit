@@ -3,15 +3,7 @@ import { Injectable, signal, computed, inject } from '@angular/core';
 import { Food, FoodEntry } from '../models/food.model';
 import { Achievement } from '../models/achievement.model';
 import { AuthService } from './auth.service';
-
-// Obtiene la fecha local en formato AAAA-MM-DD.
-const localDateKey = (date = new Date()): string => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
-};
+import { DailyActivityService } from './daily-activity.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +12,7 @@ export class NutritionService {
 
   // Inyección del servicio de autenticación.
   private auth = inject(AuthService);
+  private readonly activity = inject(DailyActivityService);
 
   // Permite notificar a las Signals cuando cambia el almacenamiento.
   private foodsRevision = signal(0);
@@ -73,7 +66,7 @@ export class NutritionService {
 
   // Suma las calorías consumidas durante el día.
   todayKcal = computed(() => {
-    const today = localDateKey();
+    const today = this.activity.today();
 
     return this.foods()
       .filter(food => food.consumedOn === today)
@@ -89,6 +82,7 @@ export class NutritionService {
     }
 
     const currentFoods = this.loadFoods(key);
+    this.activity.refreshToday();
 
     const id = currentFoods.reduce(
       (nextId, food) => Math.max(nextId, food.id + 1),
@@ -100,7 +94,7 @@ export class NutritionService {
       {
         id,
         ...entry,
-        consumedOn: localDateKey()
+        consumedOn: this.activity.today()
       }
     ];
 

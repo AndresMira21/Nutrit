@@ -6,6 +6,7 @@ import { User } from '../../../core/models/user.model';
 import { FOOD_CATALOG } from './food-catalog';
 import { ProfileEditor } from '../profile-editor/profile-editor';
 import { inject } from '@angular/core';
+import { DailyActivityService } from '../../../core/services/daily-activity.service';
 import { MacronutrientCalculatorService } from
   '../../../core/services/macronutrient-calculator.service';
 
@@ -18,6 +19,7 @@ import { MacronutrientCalculatorService } from
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardBottom {
+  protected readonly today = inject(DailyActivityService).today;
   user = input.required<User>();
   bmi = input.required<number>();
   foods = input.required<Food[]>();

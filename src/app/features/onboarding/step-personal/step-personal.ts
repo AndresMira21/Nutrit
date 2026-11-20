@@ -11,4 +11,10 @@ import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 })
 export class StepPersonal {
   group = input.required<FormGroup>();
+  showErrors = input(false);
+
+  protected showError(field: string): boolean {
+    const control = this.group().get(field);
+    return !!control?.invalid && (control.touched || this.showErrors());
+  }
 }
