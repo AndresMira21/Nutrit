@@ -1,257 +1,113 @@
-@use '../../../../styles' as *;
-:host { display: contents; }
-.bottom-grid { display: contents; }
-.eat-card { grid-area: eat; min-width: 0; background-color: $bg-card; border-radius: $radius-md; padding: 24px; box-shadow: $shadow-sm; }
-.card-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
-.food-header, .food-entry-header, .food-entry-actions, .food-total {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px 12px;
+@use '../controls' as controls;
+
+:host, .bottom-grid { display: contents; }
+
+:is(.eat-card, .progress-card, .profile-card) { @include controls.panel; }
+.eat-card { grid-area: eat; }
+.progress-card { grid-area: progress; }
+.profile-card { grid-area: profile; overflow-wrap: anywhere; }
+.card-title { @include controls.title; }
+:is(.food-header, .food-entry-header, .food-entry-actions, .food-total, .profile-header) {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
 }
-.food-header, .food-entry-header, .food-total { justify-content: space-between; }
-.food-header { margin-bottom: 16px; }
-.food-header .card-title { margin: 0; }
-.food-button, .btn-delete {
-    border-radius: $radius-sm;
-    padding: 8px 12px;
-    font: inherit;
-    font-weight: 600;
-}
+
+:is(.food-header, .food-entry-header, .food-total, .profile-header) { justify-content: space-between; }
+.food-header, .profile-header { margin-bottom: 10px; }
+
+button { @include controls.button; }
+
 .food-button--primary {
-    background: #28712d;
-    color: white;
+  background: var(--dashboard-primary);
+  color: var(--dashboard-surface);
 
-    &:hover:not(:disabled) { background: #205b24; }
-    &:disabled { background: #e0e0e0; color: #616161; cursor: default; }
+  &:hover:not(:disabled) { background: var(--dashboard-hover); }
 }
-.food-button--secondary { background: white; color: #27662b; border: 1px solid $border-color; }
-.eat-card :is(button, input, select):focus-visible,
-.food-entry-dialog :is(button, input, select):focus-visible {
-    outline: 2px solid #28712d;
-    outline-offset: 2px;
+:is(.food-button--secondary, .food-button--close, .btn-delete, .btn-edit-profile) {
+  border: 1px solid var(--dashboard-border);
+  background: var(--dashboard-surface);
+  color: var(--dashboard-heading);
+
+  &:hover { background: var(--dashboard-soft); }
 }
+
 .food-entry-dialog {
-    width: min(520px, calc(100% - 24px));
-    max-width: none;
-    max-height: calc(100dvh - 24px);
-    margin: auto;
-    padding: 0;
-    overflow: visible;
-    border: 1px solid $border-color;
-    border-radius: $radius-md;
-    background: $bg-card;
-    color: $text-primary;
-    box-shadow: 0 20px 60px rgb(0 0 0 / 24%);
+  width: min(540px, calc(100% - 24px));
+  max-height: calc(100dvh - 24px);
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--dashboard-border);
+  border-radius: 12px;
+  background: var(--dashboard-surface);
 
-    &::backdrop { background: rgb(20 32 22 / 48%); }
+  &::backdrop { background: rgb(27 67 50 / 45%); }
 }
+
 .food-entry {
-    display: grid;
-    gap: 12px;
-    width: 100%;
-    max-height: calc(100dvh - 24px);
-    overflow-y: auto;
-    padding: 24px;
+  display: grid;
+  gap: 12px;
+  padding: var(--dashboard-padding);
 }
-.food-entry-header-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.food-button--close {
-    display: grid;
-    width: 36px;
-    height: 36px;
-    place-items: center;
-    padding: 0;
-    border: 1px solid $border-color;
-    background: white;
-    color: $text-primary;
-    font-size: 24px;
-    line-height: 1;
-}
-.food-amounts {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
-    gap: 12px;
-}
-.food-field {
-    display: grid;
-    gap: 4px;
-    min-width: 0;
-    font-weight: 600;
 
-    input, select {
-        width: 100%;
-        min-width: 0;
-        padding: 8px;
-        border: 1px solid $border-color;
-        border-radius: $radius-sm;
-        background: white;
-        color: $text-primary;
-        font: inherit;
-        font-weight: 400;
-    }
-}
-.food-note { color: $text-secondary; font-size: 13px; }
-.food-total { padding: 10px 12px; background: $nutrit-green-bg; border-radius: $radius-sm; }
+.food-entry-header-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.food-button--close { min-width: 40px; padding: 0; font-size: 24px; line-height: 1; }
 .food-entry-actions { justify-content: flex-end; }
-@media (max-width: 520px) {
-    .food-entry { padding: 18px; }
+.food-amounts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+  gap: 10px;
 }
-.food-list { display: flex; flex-direction: column; gap: 12px; }
+
+.food-field { display: grid; gap: 4px; min-width: 0; font-size: 13px; font-weight: 600; }
+input, select { @include controls.field; font-weight: 400; }
+:is(.food-note, .food-info p, .progress-caption, .user-details p, .profile-objective span) {
+  color: var(--dashboard-muted);
+  font-size: 13px;
+}
+
+.food-total { padding: 8px 10px; border-radius: 10px; background: var(--dashboard-soft); }
+
+.food-list { max-height: 320px; overflow-y: auto; }
 .food-item {
-    display: flex; align-items: center; gap: 14px; padding: 12px; background-color: #FAFAFA; border-radius: $radius-sm;
-    .food-info { flex: 1; min-width: 0; overflow-wrap: anywhere; h4 { font-size: 14px; margin-bottom: 2px; } p { font-size: 12px; color: $text-secondary; } }
-    .btn-delete { background: transparent; color: #a32721; }
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 4px;
+  border-top: 1px solid var(--dashboard-border);
 }
-.progress-card {
-    grid-area: progress;
-    min-width: 0;
-    background-color: $bg-card;
-    border-radius: $radius-md;
-    padding: 24px;
-    box-shadow: $shadow-sm;
 
-    .card-title { margin-bottom: 18px; }
-}
+.food-info { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.food-info h4 { color: var(--dashboard-heading); font-size: 14px; }
+.btn-delete { flex-shrink: 0; }
+
 .progress-metrics {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 14px;
+  margin-top: 10px;
 }
+
 .progress-metric {
-    display: grid;
-    gap: 5px;
-    min-width: 0;
-    padding: 12px;
-    border-radius: $radius-sm;
-    background: #FAFAFA;
+  display: grid;
+  gap: 2px;
+  border-bottom: 1px solid var(--dashboard-border);
+  padding-bottom: 6px;
+  overflow-wrap: anywhere;
 
-    span { color: $text-secondary; font-size: 12px; }
-    strong { font-size: 18px; overflow-wrap: anywhere; }
-    .weight-increase { color: #a32721; }
-    .weight-decrease { color: #28712d; }
-}
-.weight-update { display: grid; gap: 6px; margin: 16px 0 20px; }
-.weight-update-controls {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px;
-
-    input {
-        width: 100%;
-        min-width: 0;
-        padding: 8px;
-        border: 1px solid $border-color;
-        border-radius: $radius-sm;
-        background: white;
-        color: $text-primary;
-        font: inherit;
-    }
-}
-.progress-section { display: grid; gap: 8px; }
-.section-subtitle { margin: 0; font-size: 14px; font-weight: 600; }
-.calorie-progress-section { margin-bottom: 20px; }
-.calorie-progress-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 4px 10px;
-
-    strong { font-size: 13px; }
-}
-.calorie-progress-track { height: 10px; overflow: hidden; border-radius: 99px; background: #e7eee8; }
-.calorie-progress-fill { height: 100%; border-radius: inherit; background: #28712d; transition: width 180ms ease; }
-.progress-caption { margin: 0; color: $text-secondary; font-size: 12px; }
-.achievements { display: flex; flex-wrap: wrap; gap: 8px; }
-.achievement-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 10px;
-    border-radius: $radius-sm;
-    background: #FAFAFA;
-    font-size: 13px;
-
-    p { margin: 0; }
-}
-.achievement-icon { font-size: 18px; }
-.profile-card { grid-area: profile; min-width: 0; background-color: $bg-card; border-radius: $radius-md; padding: 24px; box-shadow: $shadow-sm; }
-.profile-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 20px;
-
-    .card-title { margin-bottom: 0; }
-}
-.btn-edit-profile {
-    background: #388e3c;
-    color: white;
-    padding: 10px 14px;
-    border: 0;
-    border-radius: 9px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-
-    &:hover { background: #2e7d32; }
-    &:focus-visible { outline: 2px solid #81c784; outline-offset: 3px; }
-}
-.profile-objective {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-top: 18px;
-    padding: 14px;
-    border-radius: 10px;
-    background: #e8f5e9;
-
-    span { font-size: 12px; color: #607d65; }
-    strong { font-size: 14px; color: #1b4332; }
-}
-.user-profile { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; .user-avatar { width: 56px; height: 56px; border-radius: $radius-sm; } }
-.user-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; .stat-item { min-width: 0; background: #FAFAFA; padding: 12px; text-align: center; border-radius: $radius-sm; } }
-@media (max-width: 700px) { .user-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-
-
-/* Vista previa de macronutrientes */
-.food-macros-preview {
-  background: #f1f8f2;
-  border: 1px solid #dcebdd;
-  border-radius: 10px;
-  padding: 14px;
-  margin-top: 12px;
-
-  h5 {
-    color: #2e7045;
-    font-size: 13px;
-    margin-bottom: 10px;
-  }
-
-  p {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    margin: 7px 0;
-    font-size: 12px;
-    color: #617166;
-  }
-
-  strong {
-    color: #2e7045;
-  }
+  span { color: var(--dashboard-muted); font-size: 13px; }
+  strong { color: var(--dashboard-heading); font-size: 18px; }
 }
 
-/* Macronutrientes en las comidas guardadas */
-.food-macros {
-  margin-top: 5px;
-  color: #43885c;
-  font-size: 11px;
-  line-height: 1.5;
+.weight-update { display: grid; gap: 4px; margin-block: 12px; }
+.weight-update-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+.progress-section { display: grid; gap: 5px; }
+.indicator-help { @include controls.indicator-help; }
+.calorie-progress-track { @include controls.track; }
+.calorie-progress-fill { @include controls.fill; }
+:is(.profile-objective, .profile-age) {
+  border-top: 1px solid var(--dashboard-border);
+  margin-top: 8px;
+  padding-top: 8px;
 }

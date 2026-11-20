@@ -1,35 +1,57 @@
 <div class="dashboard-page">
     <header class="dashboard-header">
-        <div class="header-brand">
-            <span class="brand-name">Nutrit</span>
-        </div>
-        
-        <!-- Contenedor de acciones del usuario -->
-        <div class="header-user-actions">
-            <span class="user-greeting">Hola, <strong>{{ auth.currentUser()?.name }}</strong></span>
-            
-            <button (click)="logout()" class="btn-logout" title="Cerrar Sesión">
-                <!-- Icono de salir (SVG) -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                    <polyline points="16 17 21 12 16 7"></polyline>
-                    <line x1="21" y1="12" x2="9" y2="12"></line>
-                </svg>
-                Salir
-            </button>
-
-            <img [src]="'https://ui-avatars.com/api/?name=' + (auth.currentUser()?.name || 'User') + '&background=4CAF50&color=fff'" alt="User Avatar" class="user-avatar">
+        <div class="header-content">
+            <img class="header-logo" src="/images/nutrit-logo.png" alt="Nutrit">
+            <div class="header-user-actions">
+                <span class="user-greeting">Hola, {{ auth.currentUser()?.name }}</span>
+                <button type="button" (click)="logout()" class="btn-logout">Cerrar sesión</button>
+            </div>
         </div>
     </header>
 
     <main class="dashboard-main">
         <section class="dashboard-greeting">
-            <h1>Buenos días, <span class="user-name">{{ auth.currentUser()?.name }}!</span></h1>
-            <p>Tu meta diaria es: <strong>{{ dailyCalories() }} kcal</strong></p>
+            <h1>Tu bienestar, un día a la vez.</h1>
+            <p class="dashboard-description">
+                En Nutrit puedes registrar tus comidas, controlar tu consumo de agua, llevar un
+                seguimiento de tus pasos y observar tu progreso hacia tus objetivos personales.
+            </p>
+            <details class="calorie-reference">
+                <summary>
+                    <span>Referencia calórica diaria: <strong>{{ dailyCalories() }} kcal</strong></span>
+                    <span class="reference-trigger">¿Qué significa?</span>
+                </summary>
+                <p>
+                    Es una estimación de la energía que tu cuerpo necesita al día para mantener su peso,
+                    suponiendo una actividad física baja (sedentaria). Nutrit la calcula utilizando tu edad, peso,
+                    estatura y sexo registrados en tu perfil.
+                </p>
+                <p class="reference-note">
+                    Es una referencia aproximada y no una recomendación médica personalizada.
+                </p>
+            </details>
+
+            <details class="dashboard-guide">
+                <summary>¿Cómo funciona Nutrit?</summary>
+                <ol>
+                    <li>
+                        <strong>Registra tus comidas:</strong>
+                        Agrega los alimentos que consumes y Nutrit calculará sus calorías y macronutrientes.
+                    </li>
+                    <li>
+                        <strong>Lleva el control de tus hábitos:</strong>
+                        Registra cuánta agua bebes y cuántos pasos realizas durante el día.
+                    </li>
+                    <li>
+                        <strong>Observa tu progreso:</strong>
+                        Consulta tus registros, revisa tu consumo nutricional y actualiza tu peso para seguir tus avances.
+                    </li>
+                </ol>
+            </details>
         </section>
 
         <div class="dashboard-grid">
-            
+
             <app-dashboard-top
             [water]="nutrition.water()"
             [steps]="nutrition.steps()"
@@ -37,7 +59,7 @@
             [foods]="nutrition.foods()">
             </app-dashboard-top>
 
-            <app-dashboard-bottom 
+            <app-dashboard-bottom
                 [user]="auth.currentUser()!" [bmi]="bmi()" [foods]="nutrition.foods()" [achievements]="nutrition.achievements()"
                 [todayKcal]="nutrition.todayKcal()" [dailyCalorieGoal]="dailyCalories()"
                 (addFood)="handleAddFood($event)" (deleteFood)="handleDeleteFood($event)"

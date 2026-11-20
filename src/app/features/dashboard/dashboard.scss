@@ -1,130 +1,143 @@
-@use '../../../styles' as *;
+@use 'controls' as controls;
+
+:host {
+  --dashboard-title: #233e2d;
+  --dashboard-heading: #1b4332;
+  --dashboard-primary: #388e3c;
+  --dashboard-hover: #2e7d32;
+  --dashboard-soft: #e8ede4;
+  --dashboard-muted: #617465;
+  --dashboard-border: #d9e2d9;
+  --dashboard-surface: #ffffff;
+  --dashboard-secondary: #757575;
+  --dashboard-padding: clamp(14px, 2vw, 22px);
+  --dashboard-gutter: clamp(12px, 4vw, 36px);
+}
 
 .dashboard-page {
   min-height: 100vh;
-  background-color: $bg-page;
+  background: var(--dashboard-soft);
+  color: var(--dashboard-title);
 }
 
 .dashboard-header {
-  background-color: $bg-card;
-  border-bottom: 1px solid $border-color;
-  padding: 16px 40px;
+  background: var(--dashboard-surface);
+  border-bottom: 1px solid var(--dashboard-border);
+}
+
+.header-content, .dashboard-main {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: var(--dashboard-gutter);
+}
+
+.header-content, .header-user-actions {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 12px;
+  min-width: 0;
 }
 
-.header-brand .brand-name {
-  font-size: 20px;
+.header-content {
+  justify-content: space-between;
+  min-height: 68px;
+  padding-block: 8px;
+}
+
+.header-logo { width: clamp(78px, 16vw, 110px); height: auto; }
+.user-greeting { font-weight: 600; overflow-wrap: anywhere; }
+
+.btn-logout {
+  @include controls.secondary-button;
+  flex-shrink: 0;
+}
+
+.dashboard-main { padding-block: clamp(18px, 3vw, 32px); }
+.dashboard-greeting { margin-bottom: 16px; }
+
+h1 {
+  color: var(--dashboard-heading);
+  font-size: clamp(23px, 4vw, 28px);
   font-weight: 700;
-  color: $nutrit-green;
+  line-height: 1.2;
 }
 
-.header-user .user-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
+.dashboard-greeting p { color: var(--dashboard-muted); margin-top: 4px; }
+.dashboard-greeting .dashboard-description { max-width: 68ch; margin-block: 8px; }
+.dashboard-greeting strong { color: var(--dashboard-title); }
 
-.dashboard-main {
-  padding: 32px 40px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
+.calorie-reference {
+  max-width: 68ch;
 
-.dashboard-greeting {
-  margin-bottom: 24px;
-  h1 {
-    font-size: 28px;
-    .user-name {
-      color: $nutrit-green;
-    }
+  summary {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    width: fit-content;
+    color: var(--dashboard-title);
+    cursor: pointer;
+    @include controls.focus;
+
+    &::-webkit-details-marker { display: none; }
   }
-  p {
-    color: $text-secondary;
+
+  .reference-trigger {
+    padding: 6px 10px;
+    border: 1px solid var(--dashboard-border);
+    border-radius: 10px;
+    background: var(--dashboard-surface);
+    font-size: 13px;
+    font-weight: 600;
   }
+
+  summary:hover .reference-trigger { border-color: var(--dashboard-primary); }
+  .reference-note { font-size: 13px; }
+}
+
+.dashboard-guide {
+  max-width: 68ch;
+  margin-top: 8px;
+
+  summary {
+    width: fit-content;
+    max-width: 100%;
+    padding-block: 6px;
+    color: var(--dashboard-heading);
+    font-weight: 600;
+    cursor: pointer;
+    @include controls.focus;
+  }
+
+  ol {
+    margin-top: 4px;
+    padding-inline-start: 24px;
+    color: var(--dashboard-muted);
+  }
+
+  li + li { margin-top: 4px; }
 }
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   grid-template-areas:
-    "summary summary"
-    "macros macros"
-    "eat progress"
-    "eat profile";
-  gap: 24px;
+    'summary summary'
+    'activity macros'
+    'eat eat'
+    'progress profile';
+  align-items: start;
+  gap: 14px;
+}
 
-  @media (max-width: 1000px) {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "summary"
-      "macros"
-      "eat"
-      "progress"
-      "profile";
+@media (max-width: 760px) {
+  .dashboard-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'summary' 'activity' 'macros' 'eat' 'progress' 'profile';
   }
 }
 
-/* --- Estilos Profesionales para el Header --- */
-
-.header-user-actions {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.user-greeting {
-    font-size: 14px;
-    color: $text-secondary;
-    
-    strong {
-        color: $text-primary;
-        font-weight: 600;
-    }
-}
-
-.btn-logout {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    background-color: transparent;
-    color: $text-secondary;
-    border: 1px solid $border-color;
-    border-radius: 20px; /* Bordes redondeados tipo pastilla */
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    svg {
-        width: 16px;
-        height: 16px;
-    }
-
-    &:hover {
-        background-color: #FFF0F1; /* Fondo rojo muy suave */
-        color: $nutrit-red; /* El texto se vuelve rojo solo al pasar el mouse */
-        border-color: $nutrit-red;
-    }
-}
-
-.user-avatar {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid $nutrit-green-light;
-    box-shadow: $shadow-sm;
-}
-
-/* Ajuste para móviles */
-@media (max-width: 768px) {
-    .user-greeting {
-        display: none; /* Ocultamos el saludo en móviles para ahorrar espacio */
-    }
-    .btn-logout span {
-        display: none; /* Mostramos solo el icono en móviles */
-    }
+@media (max-width: 400px) {
+  .header-content, .header-user-actions { gap: 8px; }
+  .user-greeting { font-size: 12px; }
 }
