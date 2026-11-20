@@ -1,11 +1,144 @@
-import { Component } from '@angular/core';
+import { Component, computed, input, output, signal, ChangeDetectionStrategy } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { Food, FoodEntry } from '../../../core/models/food.model';
+import { Achievement } from '../../../core/models/achievement.model';
+import { User } from '../../../core/models/user.model';
+import { FOOD_CATALOG } from './food-catalog';
+import { ProfileEditor } from '../profile-editor/profile-editor';
+import { inject } from '@angular/core';
+import { DailyActivityService } from '../../../core/services/daily-activity.service';
+import { MacronutrientCalculatorService } from
+  '../../../core/services/macronutrient-calculator.service';
+
 
 @Component({
   selector: 'app-dashboard-bottom',
-  imports: [],
+  imports: [DecimalPipe, ProfileEditor],
   templateUrl: './dashboard-bottom.html',
-  styleUrl: './dashboard-bottom.scss'
+  styleUrl: './dashboard-bottom.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardBottom {
+  protected readonly today = inject(DailyActivityService).today;
+  user = input.required<User>();
+  bmi = input.required<number>();
+  foods = input.required<Food[]>();
+  achievements = input.required<Achievement[]>();
+  todayKcal = input.required<number>();
+  dailyCalorieGoal = input.required<number>();
 
+  addFood = output<FoodEntry>();
+  deleteFood = output<number>();
+  weightUpdate = output<number>();
+  profileUpdate = output<Partial<User>>();
+
+  protected readonly profileEditing = signal(false);
+
+  protected readonly catalog = FOOD_CATALOG;
+  protected readonly entryOpen = signal(false);
+  protected readonly entryMode = signal<'catalog' | 'manual'>('catalog');
+  protected readonly selectedName = signal('');
+  protected readonly manualName = signal('');
+  protected readonly grams = signal<number | null>(null);
+  protected readonly manualKcal = signal<number | null>(null);
+  protected readonly weightDraft = signal<number | null>(null);
+
+  protected readonly weightChange = computed(() =>
+    this.user().weight - (this.user().startingWeight ?? this.user().weight)
+  );
+  protected readonly calorieProgress = computed(() => {
+    const goal = this.dailyCalorieGoal();
+    return goal > 0 ? Math.min((this.todayKcal() / goal) * 100, 100) : 0;
+  });
+
+  protected readonly entry = computed<FoodEntry | null>(() => {
+    const grams = this.grams();
+    if (grams === null || !Number.isFinite(grams) || grams <= 0) return null;
+
+    if (this.entryMode() === 'manual') {
+      const name = this.manualName().trim();
+      const kcal = this.manualKcal();
+      if (!name || kcal === null || !Number.isFinite(kcal) || kcal < 0) return null;
+      return { name, grams, kcal };
+    }
+
+    const food = this.catalog.find(option => option.name === this.selectedName());
+    if (!food) return null;
+
+    
+const kcal = (grams / 100) * food.kcalPer100g;
+
+if (!Number.isFinite(kcal)) return null;
+
+// Calculamos los macronutrientes de la porción.
+const macros = this.macroCalculator.calculatePortion(
+  grams,
+  food
+);
+
+return {
+  name: food.name,
+  grams,
+  kcal,
+  ...macros
+};
+
+  });
+
+  protected resetEntry() {
+    this.entryMode.set('catalog');
+    this.selectedName.set('');
+    this.manualName.set('');
+    this.grams.set(null);
+    this.manualKcal.set(null);
+  }
+
+  protected openEntry(dialog: HTMLDialogElement) {
+    this.resetEntry();
+    this.entryOpen.set(true);
+    dialog.showModal();
+  }
+
+  protected closeEntry(dialog: HTMLDialogElement) {
+    if (dialog.open) dialog.close();
+  }
+
+  protected closeEntryFromBackdrop(event: MouseEvent, dialog: HTMLDialogElement) {
+    if (event.target === dialog) this.closeEntry(dialog);
+  }
+
+  protected onDialogClose(trigger: HTMLButtonElement) {
+    this.entryOpen.set(false);
+    this.resetEntry();
+    trigger.focus();
+  }
+
+  protected saveFood(event: Event, dialog: HTMLDialogElement) {
+    event.preventDefault();
+
+    const entry = this.entry();
+    if (!entry) return;
+
+    this.addFood.emit(entry);
+    dialog.close();
+  }
+
+  protected saveWeight(event: Event) {
+    event.preventDefault();
+    const weight = this.weightDraft();
+    if (weight === null || !Number.isFinite(weight) || weight < 30 || weight > 300) return;
+    this.weightUpdate.emit(weight);
+    this.weightDraft.set(null);
+  }
+
+  onDeleteClick(id: number) { this.deleteFood.emit(id); }
+
+  onProfileSaved(data: Partial<User>): void {
+    this.profileUpdate.emit(data);
+    this.profileEditing.set(false);
+  }
+
+  private readonly macroCalculator =
+  inject(MacronutrientCalculatorService);
 }
+

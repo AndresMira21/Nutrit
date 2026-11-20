@@ -1,0 +1,108 @@
+<div class="profile-editor">
+  <div class="editor-header">
+    <div>
+      <h3>Editar mi perfil</h3>
+      <p>Actualiza tu información y hábitos.</p>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="saveChanges()">
+    <h4>Información personal</h4>
+
+    <div class="form-grid">
+      <div class="form-field">
+        <label for="profile-name">Nombre completo</label>
+        <input id="profile-name" type="text" formControlName="name" autocomplete="name">
+        @if (form.controls.name.invalid && form.controls.name.touched) {
+          <small class="field-error">Ingresa un nombre válido (mínimo 2 letras).</small>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="profile-email">Correo electrónico</label>
+        <input id="profile-email" type="email" [value]="user().email" disabled>
+      </div>
+
+      <div class="form-field">
+        <label for="profile-weight">Peso (kg)</label>
+        <input id="profile-weight" type="number" min="30" max="300" step="0.1" formControlName="weight">
+        @if (form.controls.weight.invalid && form.controls.weight.touched) {
+          <small class="field-error">El peso debe estar entre 30 y 300 kg.</small>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="profile-height">Estatura (cm)</label>
+        <input id="profile-height" type="number" min="100" max="250" step="0.1" formControlName="height">
+        @if (form.controls.height.invalid && form.controls.height.touched) {
+          <small class="field-error">La estatura debe estar entre 100 y 250 cm.</small>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="profile-age">Edad</label>
+        <input id="profile-age" type="number" min="15" max="100" formControlName="age">
+        @if (form.controls.age.invalid && form.controls.age.touched) {
+          <small class="field-error">La edad debe estar entre 15 y 100 años.</small>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="profile-gender">Género</label>
+        <select id="profile-gender" formControlName="gender">
+          <option value="female">Mujer</option>
+          <option value="male">Hombre</option>
+        </select>
+      </div>
+    </div>
+
+    <h4>Hábitos y objetivos</h4>
+
+    <div class="form-grid">
+      <div class="form-field">
+        <label for="profile-activity">Nivel de actividad</label>
+        <select id="profile-activity" formControlName="activityLevel">
+          <option value="">Sin especificar</option>
+          <option value="sedentary">Sedentaria</option>
+          <option value="light">Ligera</option>
+          <option value="moderate">Moderada</option>
+          <option value="intense">Intensa</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="profile-goal">Objetivo</label>
+        <select id="profile-goal" formControlName="goal">
+          <option value="lose">Bajar de peso</option>
+          <option value="maintain">Mantener peso</option>
+          <option value="gain">Ganar peso</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="profile-meals">Comidas al día</label>
+        <input id="profile-meals" type="number" min="1" max="8" formControlName="mealsPerDay">
+        @if (form.controls.mealsPerDay.invalid && form.controls.mealsPerDay.touched) {
+          <small class="field-error">Indica entre 1 y 8 comidas al día.</small>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="profile-water">Vasos de agua al día</label>
+        <input id="profile-water" type="number" min="0" max="20" formControlName="waterGlasses">
+        @if (form.controls.waterGlasses.invalid && form.controls.waterGlasses.touched) {
+          <small class="field-error">Indica entre 0 y 20 vasos al día.</small>
+        }
+      </div>
+    </div>
+
+    @if (form.invalid && form.touched) {
+      <p class="form-error" role="alert">Revisa los campos marcados antes de guardar.</p>
+    }
+
+    <div class="editor-actions">
+      <button type="button" class="btn-cancel" (click)="cancelChanges()">Cancelar</button>
+      <button type="submit" class="btn-save" [disabled]="form.invalid">Guardar cambios</button>
+    </div>
+  </form>
+</div>

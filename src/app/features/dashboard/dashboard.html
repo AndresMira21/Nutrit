@@ -1,0 +1,71 @@
+<div class="dashboard-page">
+    <header class="dashboard-header">
+        <div class="header-content">
+            <img class="header-logo" src="/images/nutrit-logo.png" alt="Nutrit">
+            <div class="header-user-actions">
+                <span class="user-greeting">Hola, {{ auth.currentUser()?.name }}</span>
+                <button type="button" (click)="logout()" class="btn-logout">Cerrar sesión</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <section class="dashboard-greeting">
+            <h1>Tu bienestar, un día a la vez.</h1>
+            <p class="dashboard-description">
+                En Nutrit puedes registrar tus comidas, controlar tu consumo de agua, llevar un
+                seguimiento de tus pasos y observar tu progreso hacia tus objetivos personales.
+            </p>
+            <details class="calorie-reference">
+                <summary>
+                    <span>Referencia calórica diaria: <strong>{{ dailyCalories() }} kcal</strong></span>
+                    <span class="reference-trigger">¿Qué significa?</span>
+                </summary>
+                <p>
+                    Es una estimación de la energía que tu cuerpo necesita al día para mantener su peso,
+                    suponiendo una actividad física baja (sedentaria). Nutrit la calcula utilizando tu edad, peso,
+                    estatura y sexo registrados en tu perfil.
+                </p>
+                <p class="reference-note">
+                    Es una referencia aproximada y no una recomendación médica personalizada.
+                </p>
+            </details>
+
+            <details class="dashboard-guide">
+                <summary>¿Cómo funciona Nutrit?</summary>
+                <ol>
+                    <li>
+                        <strong>Registra tus comidas:</strong>
+                        Agrega los alimentos que consumes y Nutrit calculará sus calorías y macronutrientes.
+                    </li>
+                    <li>
+                        <strong>Lleva el control de tus hábitos:</strong>
+                        Registra cuánta agua bebes y cuántos pasos realizas durante el día.
+                    </li>
+                    <li>
+                        <strong>Observa tu progreso:</strong>
+                        Consulta tus registros, revisa tu consumo nutricional y actualiza tu peso para seguir tus avances.
+                    </li>
+                </ol>
+            </details>
+        </section>
+
+        <div class="dashboard-grid">
+
+            <app-dashboard-top
+            [water]="nutrition.water()"
+            [steps]="nutrition.steps()"
+            [kcal]="nutrition.todayKcal()"
+            [foods]="nutrition.foods()">
+            </app-dashboard-top>
+
+            <app-dashboard-bottom
+                [user]="auth.currentUser()!" [bmi]="bmi()" [foods]="nutrition.foods()" [achievements]="nutrition.achievements()"
+                [todayKcal]="nutrition.todayKcal()" [dailyCalorieGoal]="dailyCalories()"
+                (addFood)="handleAddFood($event)" (deleteFood)="handleDeleteFood($event)"
+                (weightUpdate)="handleWeightUpdate($event)"
+                (profileUpdate)="handleProfileUpdate($event)">
+            </app-dashboard-bottom>
+        </div>
+    </main>
+</div>

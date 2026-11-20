@@ -1,0 +1,143 @@
+@use 'controls' as controls;
+
+:host {
+  --dashboard-title: #233e2d;
+  --dashboard-heading: #1b4332;
+  --dashboard-primary: #388e3c;
+  --dashboard-hover: #2e7d32;
+  --dashboard-soft: #e8ede4;
+  --dashboard-muted: #617465;
+  --dashboard-border: #d9e2d9;
+  --dashboard-surface: #ffffff;
+  --dashboard-secondary: #757575;
+  --dashboard-padding: clamp(14px, 2vw, 22px);
+  --dashboard-gutter: clamp(12px, 4vw, 36px);
+}
+
+.dashboard-page {
+  min-height: 100vh;
+  background: var(--dashboard-soft);
+  color: var(--dashboard-title);
+}
+
+.dashboard-header {
+  background: var(--dashboard-surface);
+  border-bottom: 1px solid var(--dashboard-border);
+}
+
+.header-content, .dashboard-main {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: var(--dashboard-gutter);
+}
+
+.header-content, .header-user-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.header-content {
+  justify-content: space-between;
+  min-height: 68px;
+  padding-block: 8px;
+}
+
+.header-logo { width: clamp(78px, 16vw, 110px); height: auto; }
+.user-greeting { font-weight: 600; overflow-wrap: anywhere; }
+
+.btn-logout {
+  @include controls.secondary-button;
+  flex-shrink: 0;
+}
+
+.dashboard-main { padding-block: clamp(18px, 3vw, 32px); }
+.dashboard-greeting { margin-bottom: 16px; }
+
+h1 {
+  color: var(--dashboard-heading);
+  font-size: clamp(23px, 4vw, 28px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.dashboard-greeting p { color: var(--dashboard-muted); margin-top: 4px; }
+.dashboard-greeting .dashboard-description { max-width: 68ch; margin-block: 8px; }
+.dashboard-greeting strong { color: var(--dashboard-title); }
+
+.calorie-reference {
+  max-width: 68ch;
+
+  summary {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    width: fit-content;
+    color: var(--dashboard-title);
+    cursor: pointer;
+    @include controls.focus;
+
+    &::-webkit-details-marker { display: none; }
+  }
+
+  .reference-trigger {
+    padding: 6px 10px;
+    border: 1px solid var(--dashboard-border);
+    border-radius: 10px;
+    background: var(--dashboard-surface);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  summary:hover .reference-trigger { border-color: var(--dashboard-primary); }
+  .reference-note { font-size: 13px; }
+}
+
+.dashboard-guide {
+  max-width: 68ch;
+  margin-top: 8px;
+
+  summary {
+    width: fit-content;
+    max-width: 100%;
+    padding-block: 6px;
+    color: var(--dashboard-heading);
+    font-weight: 600;
+    cursor: pointer;
+    @include controls.focus;
+  }
+
+  ol {
+    margin-top: 4px;
+    padding-inline-start: 24px;
+    color: var(--dashboard-muted);
+  }
+
+  li + li { margin-top: 4px; }
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    'summary summary'
+    'activity macros'
+    'eat eat'
+    'progress profile';
+  align-items: start;
+  gap: 14px;
+}
+
+@media (max-width: 760px) {
+  .dashboard-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'summary' 'activity' 'macros' 'eat' 'progress' 'profile';
+  }
+}
+
+@media (max-width: 400px) {
+  .header-content, .header-user-actions { gap: 8px; }
+  .user-greeting { font-size: 12px; }
+}

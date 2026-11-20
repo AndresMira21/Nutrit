@@ -1,0 +1,157 @@
+
+<div class="login-page">
+
+  
+<!-- Sección izquierda del registro -->
+<section class="login-visual">
+
+  <div class="visual-content">
+
+    <!-- Encabezado -->
+    <div class="visual-header">
+
+      <img
+        src="/images/nutrit-logo.png"
+        alt="Logo de Nutrit"
+        class="visual-logo"
+      >
+
+      <span class="visual-label">
+        BIENESTAR DIARIO
+      </span>
+
+    </div>
+
+    <!-- Fotografía -->
+    <div class="visual-image">
+      <img
+        src="/images/healthy-food.jpg"
+        alt="Alimentación saludable"
+      >
+    </div>
+
+    <!-- Mensaje del registro -->
+    <div class="visual-text">
+
+      <h2>
+        Tu bienestar comienza aquí.
+      </h2>
+
+      <p>
+        Crea tu cuenta y empieza a construir
+        hábitos saludables, a tu manera
+        y a tu ritmo.
+      </p>
+
+    </div>
+
+    <!-- Decoración inferior -->
+    <div class="visual-bottom">
+      <span class="line active"></span>
+      <span class="line"></span>
+      <span class="line"></span>
+    </div>
+
+  </div>
+
+</section>
+
+
+  <!-- Sección derecha -->
+  <section class="login-panel">
+
+    <div class="login-form-container">
+
+      <!-- Logo -->
+      <div class="brand">
+        <img
+          src="/images/nutrit-logo.png"
+          alt="Logo de Nutrit"
+          class="brand-logo"
+        >
+      </div>
+
+      <h1 class="login-title">Crea tu cuenta</h1>
+
+      <p class="login-subtitle">
+        Únete a Nutrit y comienza tu camino
+        hacia una vida más saludable.
+      </p>
+
+      <form
+        class="login-form"
+        [formGroup]="registerForm"
+        (ngSubmit)="register()"
+      >
+
+        <div class="form-group">
+          <label for="register-email">
+            Correo electrónico
+          </label>
+
+          <input
+            id="register-email"
+            type="email"
+            formControlName="email"
+            placeholder="Ingresa tu correo"
+            autocomplete="email"
+          >
+
+          @if (
+            registerForm.get('email')?.invalid &&
+            registerForm.get('email')?.touched
+          ) {
+            <small class="error-text">
+              Ingresa un correo electrónico válido.
+            </small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="register-password">
+            Contraseña
+          </label>
+
+          <input
+            id="register-password"
+            type="password"
+            formControlName="password"
+            placeholder="Mínimo 6 caracteres"
+            autocomplete="new-password"
+          >
+
+          @if (
+            registerForm.get('password')?.invalid &&
+            registerForm.get('password')?.touched
+          ) {
+            <small class="error-text">
+              La contraseña debe tener mínimo 6 caracteres.
+            </small>
+          }
+        </div>
+
+        @if (errorMessage()) {
+          <p class="error-message" role="alert">
+            {{ errorMessage() }}
+          </p>
+        }
+
+        <button
+          type="submit"
+          class="btn-login"
+          [disabled]="registerForm.invalid"
+        >
+          Crear cuenta
+        </button>
+
+      </form>
+
+      <p class="signup-text">
+        ¿Ya tienes una cuenta?
+        <a routerLink="/login">Inicia sesión</a>
+      </p>
+
+    </div>
+  </section>
+
+</div>

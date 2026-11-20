@@ -1,0 +1,90 @@
+@use '../controls' as controls;
+
+:host { display: contents; }
+
+:is(.daily-section, .activity-history, .macros-card) { @include controls.panel; }
+.daily-section { grid-area: summary; }
+
+.daily-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin-bottom: 14px;
+}
+
+:is(.daily-heading h2, .history-heading, .card-title) { @include controls.title; }
+:is(.daily-date, .goal-caption, .card-description, .history-empty, .chart-placeholder) {
+  color: var(--dashboard-muted);
+  font-size: 13px;
+}
+
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.summary-card { min-width: 0; }
+.summary-card + .summary-card {
+  margin-left: 16px;
+  padding-left: 16px;
+  border-left: 1px solid var(--dashboard-border);
+}
+
+.summary-card h3 { color: var(--dashboard-title); font-size: 14px; }
+.summary-value {
+  margin-block: 3px 6px;
+  color: var(--dashboard-heading);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.summary-value small { color: var(--dashboard-muted); font-size: 14px; }
+.progress-line { @include controls.track; margin-bottom: 5px; }
+.progress-fill { @include controls.fill; }
+.daily-form { display: grid; gap: 4px; margin-top: 10px; }
+.daily-form label, .steps-goal-setting label { font-size: 13px; font-weight: 600; }
+.form-actions { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+.form-actions input { @include controls.field; }
+.form-actions button { @include controls.primary-button; }
+.field-error { color: #c62828; font-size: 12px; }
+.daily-feedback { color: var(--dashboard-heading); margin-top: 8px; }
+
+.activity-history { grid-area: activity; }
+.macros-card { grid-area: macros; }
+.history-heading, .card-title { margin-bottom: 8px; }
+.indicator-help { @include controls.indicator-help; }
+.history-list { max-height: 170px; overflow-y: auto; }
+.history-item, .weekly-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding-block: 6px;
+  border-bottom: 1px solid var(--dashboard-border);
+}
+
+.history-item span, .weekly-row { color: var(--dashboard-muted); font-size: 13px; }
+.delete-record { @include controls.secondary-button; }
+.steps-goal-setting, .weekly-history {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--dashboard-border);
+}
+
+.steps-goal-setting label { display: block; margin-bottom: 4px; }
+.weekly-history summary { cursor: pointer; font-weight: 600; @include controls.focus; }
+
+@media (max-width: 670px) {
+  .summary-row { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .summary-card + .summary-card {
+    margin-left: 0;
+    padding: 12px 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--dashboard-border);
+  }
+}

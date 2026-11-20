@@ -1,0 +1,52 @@
+<div [formGroup]="group()" class="step-container">
+  <h2 class="step-title">Cuéntanos de ti</h2>
+  
+  <div class="form-group">
+    <label for="onboarding-name">¿Cómo te llamas?</label>
+    <input id="onboarding-name" type="text" formControlName="name" class="fitness-input" placeholder="Tu nombre completo"
+      [attr.aria-invalid]="showError('name')" [attr.aria-describedby]="showError('name') ? 'onboarding-name-error' : null">
+    @if (showError('name')) {
+      <p class="field-error" id="onboarding-name-error">Ingresa un nombre con al menos dos letras.</p>
+    }
+  </div>
+  
+  <div class="row">
+    <div class="col">
+      <label for="onboarding-weight">Peso (kg)</label>
+      <input id="onboarding-weight" type="number" formControlName="weight" class="fitness-input"
+        [attr.aria-invalid]="showError('weight')" [attr.aria-describedby]="showError('weight') ? 'onboarding-weight-error' : null">
+      @if (showError('weight')) {
+        <p class="field-error" id="onboarding-weight-error">Ingresa un peso entre 30 y 300 kg.</p>
+      }
+    </div>
+    <div class="col">
+      <label for="onboarding-height">Estatura (cm)</label>
+      <input id="onboarding-height" type="number" formControlName="height" class="fitness-input"
+        [attr.aria-invalid]="showError('height')" [attr.aria-describedby]="showError('height') ? 'onboarding-height-error' : null">
+      @if (showError('height')) {
+        <p class="field-error" id="onboarding-height-error">Ingresa una estatura entre 100 y 250 cm.</p>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="onboarding-age">Edad</label>
+    <input id="onboarding-age" type="number" formControlName="age" class="fitness-input"
+      [attr.aria-invalid]="showError('age')" [attr.aria-describedby]="showError('age') ? 'onboarding-age-error' : null">
+    @if (showError('age')) {
+      <p class="field-error" id="onboarding-age-error">Ingresa una edad entera entre 15 y 100 años.</p>
+    }
+  </div>
+
+  <div class="form-group">
+    <label>Género</label>
+    <div class="pills-grid">
+      <label class="pill" [class.active]="group().get('gender')?.value === 'male'">
+        <input type="radio" formControlName="gender" value="male" hidden> Hombre
+      </label>
+      <label class="pill" [class.active]="group().get('gender')?.value === 'female'">
+        <input type="radio" formControlName="gender" value="female" hidden> Mujer
+      </label>
+    </div>
+  </div>
+</div>

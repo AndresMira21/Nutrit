@@ -1,0 +1,30 @@
+@use '../controls' as controls;
+
+:host { display: block; }
+.macro-grid { display: grid; gap: 10px; }
+
+.macro-heading, .macro-footer, .macro-footer > div {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+
+.macro-heading { margin-bottom: 4px; color: var(--dashboard-title); font-weight: 600; }
+.macro-track { @include controls.track; }
+.macro-fill { @include controls.fill; }
+.macro-percent { display: block; margin-top: 3px; }
+.macro-percent, .macro-footer, .macro-note, .macro-warning, .empty-state {
+  color: var(--dashboard-muted);
+  font-size: 13px;
+}
+
+.macro-footer {
+  flex-direction: column;
+  border-top: 1px solid var(--dashboard-border);
+  margin-top: 10px;
+  padding-top: 8px;
+}
+
+.macro-footer strong { color: var(--dashboard-heading); }
+.macro-note, .macro-warning { margin-top: 7px; }

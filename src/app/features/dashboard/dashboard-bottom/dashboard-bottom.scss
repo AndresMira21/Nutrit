@@ -1,304 +1,113 @@
-@use '../../../../styles' as *;
+@use '../controls' as controls;
 
-:host {
-    display: contents;
+:host, .bottom-grid { display: contents; }
+
+:is(.eat-card, .progress-card, .profile-card) { @include controls.panel; }
+.eat-card { grid-area: eat; }
+.progress-card { grid-area: progress; }
+.profile-card { grid-area: profile; overflow-wrap: anywhere; }
+.card-title { @include controls.title; }
+:is(.food-header, .food-entry-header, .food-entry-actions, .food-total, .profile-header) {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
 }
 
-.bottom-grid {
-    display: contents;
+:is(.food-header, .food-entry-header, .food-total, .profile-header) { justify-content: space-between; }
+.food-header, .profile-header { margin-bottom: 10px; }
+
+button { @include controls.button; }
+
+.food-button--primary {
+  background: var(--dashboard-primary);
+  color: var(--dashboard-surface);
+
+  &:hover:not(:disabled) { background: var(--dashboard-hover); }
+}
+:is(.food-button--secondary, .food-button--close, .btn-delete, .btn-edit-profile) {
+  border: 1px solid var(--dashboard-border);
+  background: var(--dashboard-surface);
+  color: var(--dashboard-heading);
+
+  &:hover { background: var(--dashboard-soft); }
 }
 
-// ============ WHAT TO EAT ============
-.eat-card {
-    grid-area: eat;
-    background-color: $bg-card;
-    border-radius: $radius-md;
-    padding: 24px;
-    box-shadow: $shadow-sm;
-    border: 1px solid $border-color;
+.food-entry-dialog {
+  width: min(540px, calc(100% - 24px));
+  max-height: calc(100dvh - 24px);
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--dashboard-border);
+  border-radius: 12px;
+  background: var(--dashboard-surface);
+
+  &::backdrop { background: rgb(27 67 50 / 45%); }
 }
 
-.card-title {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 16px;
+.food-entry {
+  display: grid;
+  gap: 12px;
+  padding: var(--dashboard-padding);
 }
 
-.food-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+.food-entry-header-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.food-button--close { min-width: 40px; padding: 0; font-size: 24px; line-height: 1; }
+.food-entry-actions { justify-content: flex-end; }
+.food-amounts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+  gap: 10px;
 }
 
+.food-field { display: grid; gap: 4px; min-width: 0; font-size: 13px; font-weight: 600; }
+input, select { @include controls.field; font-weight: 400; }
+:is(.food-note, .food-info p, .progress-caption, .user-details p, .profile-objective span) {
+  color: var(--dashboard-muted);
+  font-size: 13px;
+}
+
+.food-total { padding: 8px 10px; border-radius: 10px; background: var(--dashboard-soft); }
+
+.food-list { max-height: 320px; overflow-y: auto; }
 .food-item {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 12px;
-    background-color: #FAFAFA;
-    border-radius: $radius-sm;
-
-    .food-image {
-        width: 60px;
-        height: 60px;
-        flex-shrink: 0;
-
-        .image-placeholder {
-            width: 100%;
-            height: 100%;
-            background-color: #E0E0E0;
-            border: 1px dashed $text-muted;
-            border-radius: $radius-sm;
-        }
-    }
-
-    .food-info {
-        flex: 1;
-
-        h4 {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        p {
-            font-size: 12px;
-            color: $text-secondary;
-        }
-    }
-
-    .btn-add {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        background-color: $nutrit-green;
-        color: #FFFFFF;
-        font-size: 18px;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-
-        &:hover {
-            background-color: $nutrit-green-dark;
-        }
-    }
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 4px;
+  border-top: 1px solid var(--dashboard-border);
 }
 
-// ============ YOUR PROGRESS ============
-.progress-card {
-    grid-area: progress;
-    background-color: $bg-card;
-    border-radius: $radius-md;
-    padding: 24px;
-    box-shadow: $shadow-sm;
-    border: 1px solid $border-color;
+.food-info { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.food-info h4 { color: var(--dashboard-heading); font-size: 14px; }
+.btn-delete { flex-shrink: 0; }
+
+.progress-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 14px;
+  margin-top: 10px;
 }
 
-.progress-section {
-    margin-bottom: 20px;
+.progress-metric {
+  display: grid;
+  gap: 2px;
+  border-bottom: 1px solid var(--dashboard-border);
+  padding-bottom: 6px;
+  overflow-wrap: anywhere;
 
-    &:last-child {
-        margin-bottom: 0;
-    }
+  span { color: var(--dashboard-muted); font-size: 13px; }
+  strong { color: var(--dashboard-heading); font-size: 18px; }
 }
 
-.section-subtitle {
-    font-size: 13px;
-    font-weight: 600;
-    color: $text-secondary;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.chart-placeholder {
-    height: 100px;
-    background-color: #F0F0F0;
-    border-radius: $radius-sm;
-    position: relative;
-
-    &::after {
-        content: '';
-        position: absolute;
-        inset: 12px;
-        border: 2px dashed $border-color;
-        border-radius: $radius-sm;
-    }
-}
-
-.goal-tracker {
-    .progress-bar {
-        width: 100%;
-        height: 10px;
-        background-color: #E0E0E0;
-        border-radius: 5px;
-        overflow: hidden;
-
-        .progress-fill {
-            height: 100%;
-            background-color: $nutrit-green;
-            border-radius: 5px;
-        }
-    }
-
-    .goal-info {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 8px;
-
-        .progress-text {
-            font-size: 18px;
-            font-weight: 700;
-            color: $nutrit-green;
-        }
-
-        .goal-values {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            font-size: 12px;
-            color: $text-secondary;
-        }
-    }
-}
-
-.achievements {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-
-    .achievement-item {
-        background-color: #FAFAFA;
-        border-radius: $radius-sm;
-        padding: 12px 8px;
-        text-align: center;
-
-        .achievement-icon {
-            font-size: 22px;
-            display: block;
-            margin-bottom: 6px;
-        }
-
-        p {
-            font-size: 11px;
-            color: $text-secondary;
-            font-weight: 500;
-        }
-    }
-}
-
-// ============ PROFILE & SETTINGS ============
-.profile-card {
-    grid-area: profile;
-    background-color: $bg-card;
-    border-radius: $radius-md;
-    padding: 24px;
-    box-shadow: $shadow-sm;
-    border: 1px solid $border-color;
-}
-
-.user-profile {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 20px;
-
-    .user-avatar {
-        width: 56px;
-        height: 56px;
-        border-radius: $radius-sm;
-        object-fit: cover;
-        border: 2px solid $nutrit-green-light;
-    }
-
-    .user-details {
-        h4 {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        p {
-            font-size: 12px;
-            color: $text-secondary;
-        }
-    }
-}
-
-.user-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
-
-    .stat-item {
-        background-color: #FAFAFA;
-        border-radius: $radius-sm;
-        padding: 12px 8px;
-        text-align: center;
-
-        .stat-icon {
-            font-size: 18px;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .stat-value {
-            font-size: 14px;
-            font-weight: 700;
-            color: $text-primary;
-        }
-
-        .stat-label {
-            font-size: 11px;
-            color: $text-secondary;
-            margin-top: 2px;
-        }
-    }
-}
-
-.dietary-preferences {
-    margin-bottom: 20px;
-
-    .preferences-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-
-        .tag {
-            display: inline-block;
-            padding: 4px 10px;
-            background-color: $nutrit-green-bg;
-            color: $nutrit-green-dark;
-            font-size: 11px;
-            font-weight: 600;
-            border-radius: 12px;
-        }
-    }
-}
-
-.settings-links {
-    .settings-link {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 0;
-        border-top: 1px solid $border-color;
-        font-size: 13px;
-        color: $text-primary;
-        text-decoration: none;
-
-        &:hover {
-            color: $nutrit-green;
-            text-decoration: none;
-        }
-
-        .arrow {
-            color: $text-muted;
-            font-size: 18px;
-        }
-    }
+.weight-update { display: grid; gap: 4px; margin-block: 12px; }
+.weight-update-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+.progress-section { display: grid; gap: 5px; }
+.indicator-help { @include controls.indicator-help; }
+.calorie-progress-track { @include controls.track; }
+.calorie-progress-fill { @include controls.fill; }
+:is(.profile-objective, .profile-age) {
+  border-top: 1px solid var(--dashboard-border);
+  margin-top: 8px;
+  padding-top: 8px;
 }

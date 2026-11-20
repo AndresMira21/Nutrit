@@ -1,0 +1,47 @@
+@use '../controls' as controls;
+
+.profile-editor {
+  width: 100%;
+  min-width: 0;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.editor-header {
+  margin-bottom: 12px;
+
+  h3 { color: var(--dashboard-heading); font-size: 22px; margin: 0 0 6px; }
+  p { color: var(--dashboard-secondary); font-size: 13px; margin: 0; }
+}
+
+h4 { font-size: 15px; font-weight: 700; color: var(--dashboard-title); margin: 12px 0 16px; }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.form-field { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.form-field label { font-size: 12px; font-weight: 600; color: var(--dashboard-title); }
+.form-field input,
+.form-field select {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #dce5dc;
+  border-radius: 9px;
+  background: white;
+  font: inherit;
+  color: #263c2e;
+
+  &:focus-visible { outline: 2px solid #4caf50; outline-offset: 2px; }
+  &:disabled { background: #f3f5f3; color: #657168; cursor: not-allowed; }
+}
+.field-error,
+.form-error { color: #c62828; font-size: 12px; }
+.form-error { margin: 14px 0 0; }
+.editor-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 14px; }
+.btn-cancel { @include controls.secondary-button; }
+.btn-save { @include controls.primary-button; }
+
+@media (max-width: 600px) {
+  .profile-editor { padding: 14px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .editor-actions { flex-wrap: wrap; }
+}

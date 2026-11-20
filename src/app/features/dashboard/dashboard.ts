@@ -1,0 +1,55 @@
+import { Component, inject, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Router } from '@angular/router';
+import { DashboardTop } from './dashboard-top/dashboard-top';
+import { DashboardBottom } from './dashboard-bottom/dashboard-bottom';
+import { AuthService } from '../../core/services/auth.service';
+import { NutritionService } from '../../core/services/nutrition.service';
+import { FoodEntry } from '../../core/models/food.model';
+import { User } from '../../core/models/user.model';
+
+@Component({
+  selector: 'app-dashboard',
+  imports: [DashboardTop, DashboardBottom],
+  templateUrl: './dashboard.html',
+  styleUrl: './dashboard.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class Dashboard {
+  public auth = inject(AuthService);
+  public nutrition = inject(NutritionService);
+  private router = inject(Router);
+
+  bmi = computed(() => {
+    const user = this.auth.currentUser();
+    return user && user.weight && user.height ? user.weight / Math.pow(user.height / 100, 2) : 0;
+  });
+
+  dailyCalories = computed(() => {
+    const user = this.auth.currentUser();
+    if (!user) return 0;
+    let bmr = (10 * user.weight) + (6.25 * user.height) - (5 * user.age);
+    bmr = user.gender === 'male' ? bmr + 5 : bmr - 161;
+    return Math.round(bmr * 1.2);
+  });
+
+  handleAddFood(entry: FoodEntry) {
+    this.nutrition.addFood(entry);
+  }
+
+  handleDeleteFood(id: number) {
+    this.nutrition.deleteFood(id);
+  }
+
+  handleWeightUpdate(weight: number) {
+    this.auth.updateWeight(weight);
+  }
+
+  handleProfileUpdate(data: Partial<User>): void {
+    this.auth.updateProfile(data);
+  }
+
+  logout() {
+    this.auth.logout();
+    this.router.navigate(['/login']);
+  }
+}

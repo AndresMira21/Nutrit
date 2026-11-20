@@ -1,59 +1,185 @@
-# Nutrit
+# 🥗 Nutrit
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.2.
+**Nutrit** es una aplicación web de seguimiento nutricional y de hábitos. Permite crear un perfil, consultar una referencia calórica diaria, registrar comidas y llevar el control de agua, pasos y peso.
 
-## Development server
+Está desarrollada con Angular 22 usando componentes standalone, Signals y carga perezosa de rutas.
 
-To start a local development server, run:
+---
+
+## ✨ Funcionalidades
+
+### 🔐 Autenticación y perfil
+
+- Registro e inicio de sesión local. Los correos se comparan sin distinguir mayúsculas y minúsculas y se eliminan los espacios de los extremos.
+- Rutas protegidas con `authGuard` y `profileGuard`, que garantizan que el usuario tenga sesión y perfil completo antes de entrar al dashboard.
+- Onboarding en 2 pasos:
+  1. Datos personales: nombre, edad, sexo, peso y estatura.
+  2. Hábitos: frecuencia habitual de ejercicio (sí o no), cantidad de comidas y vasos de agua por día, objetivo y aceptación del tratamiento de datos para continuar.
+- Edición posterior de datos personales, meta, cantidades diarias y nivel de actividad opcional desde el dashboard.
+- Si ya existían dos cuentas con un correo equivalente, el acceso queda bloqueado para evitar que ambas usen los mismos registros. Los datos se conservan hasta que se resuelva su titularidad.
+
+### 📊 Dashboard
+
+- Referencia calórica diaria estimada para mantener el peso con actividad sedentaria.
+- Índice de Masa Corporal (IMC) actual.
+- Seguimiento diario de agua (ml) y pasos, con barras de progreso, meta personal de pasos e historial de los últimos 7 días.
+- Calorías del día, actualizadas al registrar comidas o al cambiar la fecha local, y comparación con la referencia estimada.
+- Registro de peso con la variación respecto al peso inicial.
+
+### 🍽️ Comidas y macronutrientes
+
+- Registro de comidas desde un catálogo de alimentos (valores por 100 g) o de forma manual.
+- El catálogo calcula calorías, proteínas, carbohidratos y grasas según los gramos consumidos. En el registro manual se ingresan las calorías de la porción.
+- El gráfico de macronutrientes usa las comidas del día con datos disponibles.
+- El historial conserva las comidas anteriores y las que no tienen fecha. Solo las fechadas hoy cuentan para el resumen diario.
+- Los registros de cada cuenta se almacenan en el navegador mediante `localStorage`.
+
+---
+
+## 🧰 Tecnologías
+
+| Categoría | Herramienta |
+|---|---|
+| Framework | `Angular 22` |
+| Lenguaje | `TypeScript 6` |
+| Estilos | `SCSS` |
+| Formularios | `Reactive Forms` |
+| Enrutamiento | `Angular Router` con guards funcionales |
+| Pruebas | `Vitest` + `jsdom` |
+| Formato de código | `Prettier` + `EditorConfig` |
+| Persistencia | `localStorage` del navegador |
+
+---
+
+## 📋 Requisitos previos
+
+- `Node.js` (versión LTS reciente)
+- `npm` 11
+- `Angular CLI` (opcional, también se puede usar con `npx`)
+
+---
+
+## 🚀 Instalación y ejecución
 
 ```bash
-ng serve
+# Clonar el repositorio
+git clone https://github.com/AndresMira21/Nutrit.git
+cd Nutrit
+
+# Instalar dependencias
+npm install
+
+# Iniciar el servidor de desarrollo
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Abre el navegador en `http://localhost:4200/`. La aplicación se recarga automáticamente al modificar el código.
 
-## Code scaffolding
+### 🔑 Usuario de demostración
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```text
+Correo:      admin@nutrit.com
+Contraseña:  123456
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+También puedes crear tu propia cuenta desde la pantalla de registro.
 
-```bash
-ng generate --help
+---
+
+## 📜 Scripts disponibles
+
+| Comando | Descripción |
+|---|---|
+| `npm start` | Levanta el servidor de desarrollo |
+| `npm run build` | Genera la compilación de producción en `dist/` |
+| `npm run watch` | Compila en modo desarrollo y observa cambios |
+| `npm test` | Ejecuta las pruebas unitarias con Vitest |
+
+---
+
+## 📁 Estructura del proyecto
+
+```text
+src/
+├── app/
+│   ├── core/
+│   │   ├── guards/             # authGuard, profileGuard
+│   │   ├── models/             # User, Food, Achievement
+│   │   └── services/
+│   │       ├── auth.service.ts
+│   │       ├── nutrition.service.ts
+│   │       ├── macronutrient-calculator.service.ts
+│   │       └── daily-activity.service.ts
+│   ├── features/
+│   │   ├── auth/               # login y register
+│   │   ├── onboarding/         # step-personal y step-habits
+│   │   └── dashboard/
+│   │       ├── dashboard-top/
+│   │       ├── dashboard-bottom/
+│   │       ├── macronutrient-chart/
+│   │       └── profile-editor/
+│   ├── shared/
+│   │   └── number-stepper/
+│   ├── app.routes.ts
+│   └── app.config.ts
+├── styles.scss
+└── main.ts
+public/
+└── images/
 ```
 
-## Building
+### 🗺️ Rutas
 
-To build the project run:
+| Ruta | Descripción | Protección |
+|---|---|---|
+| `/login` | Inicio de sesión | Pública |
+| `/register` | Registro de usuario | Pública |
+| `/onboarding` | Configuración inicial del perfil | `authGuard` |
+| `/dashboard` | Panel principal | `authGuard` + `profileGuard` |
 
-```bash
-ng build
+---
+
+## 🧮 Cálculos nutricionales
+
+Referencia calórica diaria (ecuación de Mifflin-St Jeor):
+
+```text
+TMB = (10 × peso[kg]) + (6.25 × estatura[cm]) − (5 × edad)
+TMB = TMB + 5      (hombres)
+TMB = TMB − 161    (mujeres)
+
+Referencia diaria = redondear(TMB × 1.2)
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+El factor 1.2 representa actividad sedentaria. La referencia estima mantenimiento de peso y no se ajusta según el objetivo del perfil.
 
-## Running unit tests
+Índice de Masa Corporal:
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
+```text
+IMC = peso[kg] / (estatura[m])²
 ```
 
-## Running end-to-end tests
+Macronutrientes por porción:
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
+```text
+macro = valor por 100 g × (gramos consumidos / 100)
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## 🌱 Flujo de trabajo con Git
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- `main`: versión estable.
+- `develop`: rama de integración.
+- `feature/*`: nuevas funcionalidades.
+- `fix/*`: correcciones.
+
+---
+
+## 👷 Autores
+
+- Andrés Camilo Miranda
+- Alejandra Montilla
+- Camilo Toro Sánchez
+
+🎓 Universidad Cooperativa de Colombia, Campus Pasto.
