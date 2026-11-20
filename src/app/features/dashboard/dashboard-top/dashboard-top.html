@@ -1,28 +1,34 @@
 <section class="daily-section" aria-labelledby="daily-title">
   <div class="daily-heading">
-    <div>
-      <span class="daily-eyebrow">SEGUIMIENTO DIARIO</span>
-      <h2 id="daily-title">Tu resumen de hoy</h2>
-      <p>Registra lo que bebes y los pasos que realizas. Las calorías se actualizan al agregar tus comidas.</p>
-    </div>
-    <span class="daily-date">{{ activity.today() + 'T12:00:00' | date:'dd/MM/yyyy' }}</span>
+    <h2 id="daily-title">Tu resumen de hoy</h2>
+    <span class="daily-date">{{ activity.today() + 'T12:00:00' | date: 'dd/MM/yyyy' }}</span>
   </div>
 
   <div class="summary-row">
     <article class="summary-card">
-      <div class="card-top">
-        <span class="card-icon water-icon" aria-hidden="true">H₂O</span>
-        <span class="card-tag">HOY</span>
-      </div>
       <h3>Agua consumida</h3>
-      <div class="summary-value">{{ activity.waterMl() / 1000 | number:'1.1-2' }} <small>L</small></div>
-      <p class="card-description">{{ activity.waterMl() | number:'1.0-0' }} ml registrados</p>
+      <div class="summary-value">
+        {{ activity.waterMl() / 1000 | number: '1.1-2' }} <small>L</small>
+      </div>
+      <p class="card-description">
+        {{ activity.waterMl() | number: '1.0-0' }} ml registrados manualmente
+      </p>
 
       @if (activity.waterGoalMl(); as goal) {
-        <div class="progress-line" role="progressbar" aria-label="Progreso de hidratación" [attr.aria-valuenow]="activity.waterProgress() | number:'1.0-0'" aria-valuemin="0" aria-valuemax="100">
-          <div class="progress-fill water-progress" [style.width.%]="activity.waterProgress()"></div>
+        <div
+          class="progress-line"
+          role="progressbar"
+          aria-label="Progreso de hidratación"
+          [attr.aria-valuenow]="activity.waterProgress() | number: '1.0-0'"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          <div
+            class="progress-fill water-progress"
+            [style.width.%]="activity.waterProgress()"
+          ></div>
         </div>
-        <p class="goal-caption">Meta según tu perfil: {{ goal / 1000 | number:'1.1-2' }} L</p>
+        <p class="goal-caption">Meta según tu perfil: {{ goal / 1000 | number: '1.1-2' }} L</p>
       } @else {
         <p class="goal-caption">Configura tus vasos diarios en Mi perfil.</p>
       }
@@ -30,29 +36,46 @@
       <form class="daily-form" [formGroup]="waterForm" (ngSubmit)="addWater()">
         <label for="water-amount">Agregar agua (ml)</label>
         <div class="form-actions">
-          <input id="water-amount" type="number" formControlName="amount" min="1" max="5000" step="1">
+          <input
+            id="water-amount"
+            type="number"
+            formControlName="amount"
+            min="1"
+            max="5000"
+            step="1"
+          />
           <button type="submit" [disabled]="waterForm.invalid">Registrar</button>
         </div>
         @if (waterForm.invalid && waterForm.touched) {
           <small class="field-error">Ingresa una cantidad entera entre 1 y 5000 ml.</small>
         }
       </form>
+      <details class="indicator-help card-description">
+        <summary>Sobre el agua registrada</summary>
+        <p>Muestra la cantidad de agua que has registrado hoy y tu avance frente a la meta de tu perfil.</p>
+      </details>
     </article>
 
     <article class="summary-card">
-      <div class="card-top">
-        <span class="card-icon steps-icon" aria-hidden="true">PASOS</span>
-        <span class="card-tag">HOY</span>
-      </div>
-      <h3>Pasos realizados</h3>
-      <div class="summary-value">{{ activity.steps() | number:'1.0-0' }}</div>
-      <p class="card-description">Registrados manualmente</p>
+      <h3>Pasos registrados</h3>
+      <div class="summary-value">{{ activity.steps() | number: '1.0-0' }}</div>
+      <p class="card-description">Registro manual</p>
 
       @if (activity.stepsGoal(); as goal) {
-        <div class="progress-line" role="progressbar" aria-label="Progreso de pasos" [attr.aria-valuenow]="activity.stepsProgress() | number:'1.0-0'" aria-valuemin="0" aria-valuemax="100">
-          <div class="progress-fill steps-progress" [style.width.%]="activity.stepsProgress()"></div>
+        <div
+          class="progress-line"
+          role="progressbar"
+          aria-label="Progreso de pasos"
+          [attr.aria-valuenow]="activity.stepsProgress() | number: '1.0-0'"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          <div
+            class="progress-fill steps-progress"
+            [style.width.%]="activity.stepsProgress()"
+          ></div>
         </div>
-        <p class="goal-caption">Meta personal: {{ goal | number:'1.0-0' }} pasos</p>
+        <p class="goal-caption">Meta personal: {{ goal | number: '1.0-0' }} pasos</p>
       } @else {
         <p class="goal-caption">Aún no has configurado una meta.</p>
       }
@@ -60,112 +83,110 @@
       <form class="daily-form" [formGroup]="stepsForm" (ngSubmit)="addSteps()">
         <label for="steps-amount">Agregar pasos</label>
         <div class="form-actions">
-          <input id="steps-amount" type="number" formControlName="amount" min="1" max="100000" step="1">
+          <input
+            id="steps-amount"
+            type="number"
+            formControlName="amount"
+            min="1"
+            max="100000"
+            step="1"
+          />
           <button type="submit" [disabled]="stepsForm.invalid">Registrar</button>
         </div>
         @if (stepsForm.invalid && stepsForm.touched) {
           <small class="field-error">Ingresa una cantidad entera entre 1 y 100000 pasos.</small>
         }
       </form>
+      <details class="indicator-help card-description">
+        <summary>Sobre los pasos registrados</summary>
+        <p>Muestra los pasos que registras manualmente durante el día.</p>
+      </details>
     </article>
 
     <article class="summary-card">
-      <div class="card-top">
-        <span class="card-icon kcal-icon" aria-hidden="true">kcal</span>
-        <span class="card-tag">HOY</span>
-      </div>
-      <h3>Calorías consumidas</h3>
-      <div class="summary-value">{{ kcal() | number:'1.0-2' }} <small>kcal</small></div>
-      <p class="card-description">Total de las comidas registradas hoy</p>
-      <div class="kcal-info">
-        <span>¿Cómo se actualiza?</span>
-        <p>Agrega alimentos en la sección Comidas registradas y este valor cambiará automáticamente.</p>
-      </div>
+      <h3>Calorías registradas hoy</h3>
+      <div class="summary-value">{{ kcal() | number: '1.0-2' }} <small>kcal</small></div>
+      <p class="card-description">Suma de las calorías de las comidas que registraste hoy.</p>
     </article>
   </div>
 
   @if (feedback) {
     <p class="daily-feedback" role="status">{{ feedback }}</p>
   }
+</section>
 
-  <div class="activity-history">
-    <div class="history-heading">
-      <h3>Registros de hoy</h3>
-      <p>¿Agregaste algo por error? Puedes eliminarlo.</p>
-    </div>
-
+<section class="activity-history" aria-labelledby="activity-title">
+  <h3 class="history-heading" id="activity-title">Registros de hoy</h3>
+  <div class="history-list">
     @for (record of activity.todayRecords(); track record.id) {
       <div class="history-item">
         <div>
-          <strong>{{ record.kind === 'water' ? 'Agua' : 'Pasos' }}</strong>
-          <span>{{ record.amount | number:'1.0-0' }} {{ record.kind === 'water' ? 'ml' : 'pasos' }}</span>
+          <strong>{{ record.kind === 'water' ? 'Agua' : 'Pasos' }}</strong> ·
+          <span
+            >{{ record.amount | number: '1.0-0' }}
+            {{ record.kind === 'water' ? 'ml' : 'pasos' }}</span
+          >
         </div>
-        <button type="button" class="delete-record" [attr.aria-label]="'Eliminar registro de ' + record.amount" (click)="deleteEntry(record.id)">
+        <button
+          type="button"
+          class="delete-record"
+          [attr.aria-label]="'Eliminar registro de ' + record.amount"
+          (click)="deleteEntry(record.id)"
+        >
           Eliminar
         </button>
       </div>
     } @empty {
       <p class="history-empty">Todavía no registraste agua ni pasos hoy.</p>
     }
-
-    <div class="steps-goal-setting">
-      <h4>Configurar mi meta diaria de pasos</h4>
-      <p>Elige una meta personal que puedas ajustar.</p>
-      <form [formGroup]="goalForm" (ngSubmit)="saveGoal()" class="form-actions">
-        <input aria-label="Meta diaria de pasos" type="number" min="1" max="100000" step="1" formControlName="goal">
-        <button type="submit" [disabled]="goalForm.invalid">Guardar meta</button>
-      </form>
-      @if (goalForm.invalid && goalForm.touched) {
-        <small class="field-error">Ingresa una meta entera entre 1 y 100000 pasos.</small>
-      }
-    </div>
-
-    <div class="weekly-history">
-      <h4>Últimos 7 días</h4>
-      @for (day of activity.lastSevenDays(); track day.date) {
-        <div class="weekly-row">
-          <span>{{ day.date }}</span>
-          <span>{{ day.waterMl | number:'1.0-0' }} ml · {{ day.steps | number:'1.0-0' }} pasos</span>
-        </div>
-      }
-    </div>
   </div>
+
+  <div class="steps-goal-setting">
+    <label for="steps-goal">Meta diaria de pasos</label>
+    <form [formGroup]="goalForm" (ngSubmit)="saveGoal()" class="form-actions">
+      <input
+        id="steps-goal"
+        aria-label="Meta diaria de pasos"
+        type="number"
+        min="1"
+        max="100000"
+        step="1"
+        formControlName="goal"
+      />
+      <button type="submit" [disabled]="goalForm.invalid">Guardar meta</button>
+    </form>
+    @if (goalForm.invalid && goalForm.touched) {
+      <small class="field-error">Ingresa una meta entera entre 1 y 100000 pasos.</small>
+    }
+  </div>
+
+  <details class="weekly-history">
+    <summary>Últimos 7 días</summary>
+    @for (day of activity.lastSevenDays(); track day.date) {
+      <div class="weekly-row">
+        <span>{{ day.date }}</span>
+        <span
+          >{{ day.waterMl | number: '1.0-0' }} ml · {{ day.steps | number: '1.0-0' }} pasos</span
+        >
+      </div>
+    }
+  </details>
 </section>
 
-
-<section
-  class="macros-card"
-  aria-labelledby="macros-title">
-
-  <h3 id="macros-title" class="card-title">
-    Macronutrientes consumidos hoy
-  </h3>
+<section class="macros-card" aria-labelledby="macros-title">
+  <h3 id="macros-title" class="card-title">Macronutrientes consumidos hoy</h3>
+  <details class="indicator-help card-description">
+    <summary>¿Qué son los macronutrientes?</summary>
+    <p>Son los principales nutrientes que aportan energía a tus alimentos: proteínas, carbohidratos y grasas.</p>
+  </details>
 
   @defer (on viewport) {
-
-    <app-macronutrient-chart
-      [foods]="foods()">
-    </app-macronutrient-chart>
-
+    <app-macronutrient-chart [foods]="foods()"> </app-macronutrient-chart>
   } @placeholder {
-
-    <div class="chart-placeholder">
-      Preparando resumen nutricional...
-    </div>
-
+    <div class="chart-placeholder">Preparando resumen nutricional...</div>
   } @loading {
-
-    <div class="chart-placeholder">
-      Cargando macronutrientes...
-    </div>
-
+    <div class="chart-placeholder">Cargando macronutrientes...</div>
   } @error {
-
-    <div class="chart-placeholder">
-      No se pudo cargar el resumen nutricional.
-    </div>
-
+    <div class="chart-placeholder">No se pudo cargar el resumen nutricional.</div>
   }
-
 </section>
-

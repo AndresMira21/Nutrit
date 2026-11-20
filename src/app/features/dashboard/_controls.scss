@@ -1,0 +1,89 @@
+@mixin panel {
+  min-width: 0;
+  padding: var(--dashboard-padding);
+  border: 1px solid var(--dashboard-border);
+  border-radius: 12px;
+  background: var(--dashboard-surface);
+}
+
+@mixin title {
+  color: var(--dashboard-heading);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+@mixin focus {
+  &:focus-visible {
+    outline: 2px solid var(--dashboard-primary);
+    outline-offset: 2px;
+  }
+}
+
+@mixin indicator-help {
+  summary {
+    padding-block: 6px;
+    color: var(--dashboard-heading);
+    cursor: pointer;
+    @include focus;
+  }
+}
+
+@mixin field {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid var(--dashboard-border);
+  border-radius: 10px;
+  background: var(--dashboard-surface);
+  color: var(--dashboard-title);
+  font: inherit;
+
+  &:focus {
+    border-color: var(--dashboard-primary);
+    outline: 2px solid var(--dashboard-soft);
+    outline-offset: 1px;
+  }
+}
+
+@mixin button {
+  min-height: 40px;
+  padding: 7px 12px;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 600;
+  @include focus;
+
+  &:disabled { opacity: .6; cursor: not-allowed; }
+}
+
+@mixin primary-button {
+  @include button;
+  background: var(--dashboard-primary);
+  color: var(--dashboard-surface);
+
+  &:hover:not(:disabled) { background: var(--dashboard-hover); }
+}
+
+@mixin secondary-button {
+  @include button;
+  border: 1px solid var(--dashboard-border);
+  background: var(--dashboard-surface);
+  color: var(--dashboard-heading);
+
+  &:hover:not(:disabled) { background: var(--dashboard-soft); }
+}
+
+@mixin track {
+  height: 7px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--dashboard-soft);
+}
+
+@mixin fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--dashboard-primary);
+}
