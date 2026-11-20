@@ -16,12 +16,12 @@
 
     <form [formGroup]="onboardingForm" (ngSubmit)="saveProfile()" novalidate>
       @if (step() === 1) {
-        <app-step-personal [group]="personalGroup"></app-step-personal>
+        <app-step-personal [group]="personalGroup" [showErrors]="triedPersonal()"></app-step-personal>
         <button type="button" class="btn-primary" (click)="next()">Siguiente paso</button>
       }
 
       @if (step() === 2) {
-        <app-step-habits [group]="habitsGroup" [mealsGroup]="mealsGroup"></app-step-habits>
+        <app-step-habits [group]="habitsGroup" [showErrors]="triedHabits()"></app-step-habits>
         <div class="button-row">
           <button type="button" class="btn-secondary" (click)="back()">Atrás</button>
           <button type="submit" class="btn-primary" [disabled]="isLoading()">

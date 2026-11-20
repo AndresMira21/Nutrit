@@ -1,21 +1,29 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { FormBuilder, Validators } from '@angular/forms';
 import { StepPersonal } from './step-personal';
 
 describe('StepPersonal', () => {
-  let component: StepPersonal;
-  let fixture: ComponentFixture<StepPersonal>;
+  it('muestra y asocia el mensaje de un campo inválido', async () => {
+    await TestBed.configureTestingModule({ imports: [StepPersonal] }).compileComponents();
+    const fixture = TestBed.createComponent(StepPersonal);
+    const group = new FormBuilder().group({
+      name: ['', Validators.required],
+      weight: 70,
+      height: 175,
+      age: 25,
+      gender: 'male',
+    });
+    fixture.componentRef.setInput('group', group);
+    fixture.detectChanges();
+    const root: HTMLElement = fixture.nativeElement;
+    expect(root.querySelector('#onboarding-name-error')).toBeNull();
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [StepPersonal],
-    }).compileComponents();
+    fixture.componentRef.setInput('showErrors', true);
+    fixture.detectChanges();
 
-    fixture = TestBed.createComponent(StepPersonal);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(root.querySelector('#onboarding-name-error')?.textContent).toContain('dos letras');
+    expect(root.querySelector('#onboarding-name')?.getAttribute('aria-describedby')).toBe(
+      'onboarding-name-error',
+    );
   });
 });

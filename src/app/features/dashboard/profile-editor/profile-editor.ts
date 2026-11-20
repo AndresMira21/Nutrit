@@ -33,7 +33,7 @@ export class ProfileEditor implements OnInit {
     height: [165, [Validators.required, Validators.min(100), Validators.max(250)]],
     age: [20, [Validators.required, Validators.min(15), Validators.max(100)]],
     gender: ['female' as User['gender'], Validators.required],
-    activityLevel: ['sedentary' as ActivityLevel, Validators.required],
+    activityLevel: ['' as ActivityLevel | ''],
     goal: ['maintain' as Goal, Validators.required],
     mealsPerDay: [3, [Validators.required, Validators.min(1), Validators.max(8)]],
     waterGlasses: [6, [Validators.required, Validators.min(0), Validators.max(20)]]
@@ -49,7 +49,7 @@ export class ProfileEditor implements OnInit {
       height: user.height,
       age: user.age,
       gender: user.gender,
-      activityLevel: habits?.activityLevel ?? 'sedentary',
+      activityLevel: habits?.activityLevel ?? '',
       goal: habits?.goal ?? 'maintain',
       mealsPerDay: habits?.mealsPerDay ?? 3,
       waterGlasses: habits?.waterGlasses ?? 6
@@ -73,7 +73,7 @@ export class ProfileEditor implements OnInit {
       gender: values.gender,
       habits: existingHabits ? {
         ...existingHabits,
-        activityLevel: values.activityLevel,
+        activityLevel: values.activityLevel || undefined,
         goal: values.goal,
         mealsPerDay: values.mealsPerDay,
         waterGlasses: values.waterGlasses

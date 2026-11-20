@@ -1,4 +1,5 @@
 .step-title { font-size: 28px; font-weight: 800; color: #1a1a1a; margin-bottom: 24px; text-align: center; }
+.field-error { margin-top: 4px; color: #c62828; font-size: 12px; }
 .form-group { margin-bottom: 20px; }
 label { font-size: 14px; font-weight: 700; color: #757575; margin-bottom: 8px; display: block; }
 .fitness-input { width: 100%; padding: 16px; background: #F3F4F6; border: 2px solid transparent; border-radius: 16px; font-size: 16px; font-weight: 600; color: #1a1a1a; transition: all 0.2s; &:focus { background: #FFF; border-color: #4CAF50; outline: none; box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.1); } }

@@ -12,5 +12,10 @@ import { NumberStepper } from '../../../shared/number-stepper/number-stepper';
 })
 export class StepHabits {
   group = input.required<FormGroup>();
-  mealsGroup = input.required<FormGroup>();
+  showErrors = input(false);
+
+  protected showTermsError(): boolean {
+    const terms = this.group().get('acceptTerms');
+    return !!terms?.invalid && (terms.touched || this.showErrors());
+  }
 }
